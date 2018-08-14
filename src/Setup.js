@@ -52,23 +52,38 @@ const styles = theme => ({
     }
 });
 
-
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return <SetupGeneral/>;
-        case 1:
-            return <SetupMotifs/>;
-        default:
-            throw new Error('Unknown step');
-    }
-}
-
 const steps = ['General', 'Motifs'];
 
 class Setup extends Component {
     state = {
-        activeStep: 0
+        activeStep: 0,
+        data: {
+            timePer: String(60 * 5),
+            showPalette: true,
+            textCategories: [],
+            textCount: 2,
+            motifCategories: []
+        }
+    };
+
+    updateData = (data) => {
+        this.setState((prevState) => ({
+            data: {
+                ...prevState.data,
+                ...data
+            }
+        }));
+    };
+
+    getStepContent = (step) => {
+        switch (step) {
+            case 0:
+                return <SetupGeneral data={this.state.data} updateData={this.updateData}/>;
+            case 1:
+                return <SetupMotifs data={this.state.data} updateData={this.updateData}/>;
+            default:
+                throw new Error('Unknown step');
+        }
     };
 
     handleNext = () => {
@@ -146,7 +161,7 @@ class Setup extends Component {
 
         return (
             <main>
-                {getStepContent(activeStep)}
+                {this.getStepContent(activeStep)}
 
                 <Paper className={classes.bottomBar} elevation={24}>
                     <Toolbar className={classes.bottomToolbar}>
