@@ -52,6 +52,8 @@ const styles = theme => ({
     }
 });
 
+const serialize = (obj) => Object.entries(obj).map(([key, val]) => `${key}=${encodeURIComponent(val)}`).join('&');
+
 const steps = ['General', 'Motifs'];
 
 class Setup extends Component {
@@ -67,6 +69,7 @@ class Setup extends Component {
     };
 
     updateData = (data) => {
+        console.log(data);
         this.setState((prevState) => ({
             data: {
                 ...prevState.data,
@@ -102,13 +105,16 @@ class Setup extends Component {
 
     render() {
         const {classes} = this.props;
-        const {activeStep} = this.state;
+        const {activeStep, data} = this.state;
 
         const nextButtonAttrs = activeStep !== steps.length - 1 ? {
             onClick: this.handleNext
         } : {
             component: Link,
-            to: "/"
+            to: {
+                pathname: '/draw',
+                search: serialize(data)
+            }
         };
         const backButtonAttrs = activeStep !== 0 ? {
             onClick: this.handleBack

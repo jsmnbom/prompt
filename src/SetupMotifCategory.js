@@ -34,19 +34,8 @@ const styles = theme => ({
 });
 
 class SetupMotifCategory extends Component {
-    state = {
-        checked: false,
-    };
-
-    toggle = () => {
-        this.setState(prevState => ({
-            checked: !prevState.checked
-        }));
-    };
-
     render() {
-        const {classes, image, name} = this.props;
-        const {checked} = this.state;
+        const {classes, image, name, checked, toggle} = this.props;
 
         const style = {
             backgroundImage: `url("${image}")`,
@@ -64,7 +53,7 @@ class SetupMotifCategory extends Component {
                             }
                         )}
                         style={style}
-                        onClick={this.toggle}
+                        onClick={toggle}
                     >
                     </ButtonBase>
                     <div className={classes.content}>
@@ -73,7 +62,7 @@ class SetupMotifCategory extends Component {
                         </Typography>
                         <Switch
                             checked={checked}
-                            onChange={this.toggle}
+                            onChange={toggle}
                             className={classes.switch}
                             value="checked"
                         />
