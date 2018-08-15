@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import SetupMotifCategory from "./SetupMotifCategory";
-import lizard from './img/lizards.jpg';
-import cat from './img/cats.jpg';
+import categories from './motifs'
 
 const styles = theme => ({
     container: {
@@ -40,16 +39,6 @@ const styles = theme => ({
     }
 });
 
-const categories = [
-    {
-        name: 'Lizards',
-        img: lizard
-    }, {
-        name: 'Cats',
-        img: cat
-    },
-];
-
 class SetupMotifs extends Component {
     constructor(props) {
         super(props);
@@ -84,12 +73,12 @@ class SetupMotifs extends Component {
 
         return (
             <div className={classes.container}>
-                {categories.map(({name, img}) => {
+                {categories.map(({name, images}) => {
                     return (
                         <div className={classes.item} key={name}>
                             <SetupMotifCategory
                                 name={name}
-                                image={img}
+                                image={images[0].url_z}
                                 toggle={this.toggle(name)}
                                 checked={motifCategories.indexOf(name) !== -1}/>
                         </div>
