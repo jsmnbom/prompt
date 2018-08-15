@@ -11,7 +11,8 @@ import {
     Select,
     MenuItem,
     Input,
-    Chip
+    Chip,
+    InputLabel
 } from "@material-ui/core";
 
 const styles = theme => ({
@@ -108,7 +109,7 @@ class SetupGeneral extends Component {
 
     render() {
         const {classes, theme, data} = this.props;
-        const {timePer, showPalette, textCategories, textCount} = data;
+        const {timePer, showPalette, textCategories, textCount, maxQuality} = data;
 
         return (
             <div className={classes.layout}>
@@ -201,6 +202,23 @@ class SetupGeneral extends Component {
                                         {category}
                                     </MenuItem>
                                 ))}
+                            </Select>
+                        </FormControl>
+                        <Typography variant="title" gutterBottom>
+                            Other
+                        </Typography>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="max-quality">Max quality of images</InputLabel>
+                            <Select
+                                value={maxQuality}
+                                onChange={this.handleChange('maxQuality')}
+                                inputProps={{
+                                    id: 'max-quality',
+                                }}
+                            >
+                                <MenuItem value={'z'}>Medium</MenuItem>
+                                <MenuItem value={'b'}>Large</MenuItem>
+                                <MenuItem value={'h'}>Very large</MenuItem>
                             </Select>
                         </FormControl>
                     </FormControl>

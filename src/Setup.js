@@ -63,7 +63,8 @@ class Setup extends Component {
             showPalette: true,
             textCategories: [],
             textCount: 2,
-            motifCategories: []
+            motifCategories: [],
+            maxQuality: 'z'
         }
     };
 
