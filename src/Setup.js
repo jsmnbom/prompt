@@ -15,6 +15,7 @@ import {compose} from 'recompose';
 import {Link} from "react-router-dom";
 import SetupMotifs from "./SetupMotifs";
 import SetupGeneral from "./SetupGeneral";
+import {stringify} from "qs";
 
 const styles = theme => ({
     desktopStepper: {
@@ -51,8 +52,6 @@ const styles = theme => ({
         paddingRight: theme.spacing.unit
     }
 });
-
-const serialize = (obj) => Object.entries(obj).map(([key, val]) => `${key}=${encodeURIComponent(val)}`).join('&');
 
 const steps = ['General', 'Motifs'];
 
@@ -113,7 +112,7 @@ class Setup extends Component {
             component: Link,
             to: {
                 pathname: '/draw',
-                search: serialize(data)
+                search: stringify(data)
             }
         };
         const backButtonAttrs = activeStep !== 0 ? {

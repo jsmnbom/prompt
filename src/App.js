@@ -6,6 +6,7 @@ import {AppBar, Toolbar, Typography} from "../node_modules/@material-ui/core";
 import {Switch, Route} from "react-router-dom";
 import Welcome from "./Welcome";
 import Setup from "./Setup";
+import Draw from "./Draw";
 
 const styles = theme => ({
     appBar: {
@@ -15,7 +16,7 @@ const styles = theme => ({
         animation: 'App-logo-spin infinite 20s linear',
         height: theme.spacing.unit * 4
     },
-    '@keyframes my-animation': {
+    '@keyframes App-logo-spin': {
         from: {transform: 'rotate(0deg)'},
         to: {transform: 'rotate(360deg)'}
     }
@@ -38,6 +39,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={Welcome}/>
                     <Route path="/setup" component={Setup}/>
+                    <Route path="/draw" component={Draw}/>
                 </Switch>
             </Fragment>
         )
