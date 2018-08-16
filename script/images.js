@@ -60,7 +60,8 @@ getImages({
 }, 100, (images) => {
     fs.writeFile(`../src/motifs/${name.toLowerCase()}.json`, JSON.stringify({
         images: images,
-        name: name
+        name: name,
+        thumb: 0
     }), 'utf8');
     const html = `<html>
 <head>

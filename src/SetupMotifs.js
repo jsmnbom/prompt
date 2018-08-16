@@ -78,12 +78,12 @@ class SetupMotifs extends Component {
 
         return (
             <div className={classes.container}>
-                {categories.map(({name, images}) => {
+                {categories.map(({name, images, thumb}) => {
                     return (
                         <div className={classes.item} key={name}>
                             <SetupMotifCategory
                                 name={name}
-                                image={images[0].url_z}
+                                image={images[thumb].url_z}
                                 toggle={this.toggle(name)}
                                 checked={motifCategories.indexOf(name) !== -1}/>
                         </div>
