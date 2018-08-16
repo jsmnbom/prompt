@@ -68,7 +68,7 @@ class Setup extends Component {
             maxQuality: 'z'
         },
         valid: false,
-        errMsg: null
+        errMsg: ''
     };
 
     updateData = (data, valid, errMsg) => {
@@ -78,7 +78,7 @@ class Setup extends Component {
                 ...data
             },
             valid: valid,
-            errMsg: errMsg
+            errMsg: errMsg || ''
         }));
     };
 

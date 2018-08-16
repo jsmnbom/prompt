@@ -105,11 +105,11 @@ class SetupGeneral extends Component {
     }
 
     handleChange = name => event => {
-        this.props.updateData({[name]: event.target.value});
+        this.props.updateData({[name]: event.target.value}, true);
     };
 
     handleChangeChecked = name => event => {
-        this.props.updateData({[name]: event.target.checked});
+        this.props.updateData({[name]: event.target.checked}, true);
     };
 
     render() {
