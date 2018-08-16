@@ -140,13 +140,10 @@ class Setup extends Component {
                     ))}
                 </Stepper>
                 <div className={classes.desktopButtons}>
+                    <Button {...backButtonAttrs} className={classes.desktopButton}>
+                        {activeStep === 0 ? 'Abort' : 'Back'}
+                    </Button>
                     {/*Wrapped in span so we can trigger tooltips if needed*/}
-
-                    <span>
-                        <Button {...backButtonAttrs} className={classes.desktopButton}>
-                            {activeStep === 0 ? 'Abort' : 'Back'}
-                        </Button>
-                    </span>
                     <Tooltip title={valid ? '' : errMsg} placement='top'>
                         <span>
                             <Button {...nextButtonAttrs}
@@ -166,17 +163,21 @@ class Setup extends Component {
                 position="static"
                 activeStep={activeStep}
                 className={classes.mobileStepper}
-                nextButton={
-                    <Button size="small" {...nextButtonAttrs}>
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        <KeyboardArrowRight/>
-                    </Button>
-                }
                 backButton={
                     <Button size="small" {...backButtonAttrs}>
                         <KeyboardArrowLeft/>
                         {activeStep === 0 ? 'Abort' : 'Back'}
                     </Button>
+                }
+                nextButton={
+                    <Tooltip title={valid ? '' : errMsg} placement='top'>
+                        <span>
+                            <Button size="small" {...nextButtonAttrs} disabled={!valid}>
+                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                <KeyboardArrowRight/>
+                            </Button>
+                        </span>
+                    </Tooltip>
                 }
             />
         );
