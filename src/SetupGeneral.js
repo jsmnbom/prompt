@@ -99,6 +99,11 @@ const MenuProps = {
 };
 
 class SetupGeneral extends Component {
+    constructor(props) {
+        super(props);
+        this.props.updateData({}, true);
+    }
+
     handleChange = name => event => {
         this.props.updateData({[name]: event.target.value});
     };

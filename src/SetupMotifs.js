@@ -44,8 +44,15 @@ class SetupMotifs extends Component {
         super(props);
         this.state = {
             categories: props.data.motifCategories
-        }
+        };
+        this.updateData(this.state.categories);
     }
+
+    updateData = (motifCategories) => {
+        this.props.updateData({
+            motifCategories: motifCategories
+        }, motifCategories.length > 0, "Please choose at least one motif category.");
+    };
 
     toggle = name => () => {
         this.setState((prevState) => {
@@ -57,9 +64,7 @@ class SetupMotifs extends Component {
                 prevState.categories.splice(index, 1);
             }
 
-            this.props.updateData({
-                motifCategories: prevState.categories
-            });
+            this.updateData(prevState.categories);
 
             return {
                 categories: prevState.categories

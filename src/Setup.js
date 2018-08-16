@@ -7,6 +7,7 @@ import {
     Paper,
     Toolbar,
     MobileStepper,
+    Tooltip
 } from '@material-ui/core';
 import {KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
 import {withStyles} from '@material-ui/core/styles';
@@ -65,16 +66,19 @@ class Setup extends Component {
             textCount: 2,
             motifCategories: [],
             maxQuality: 'z'
-        }
+        },
+        valid: false,
+        errMsg: null
     };
 
-    updateData = (data) => {
-        console.log(data);
+    updateData = (data, valid, errMsg) => {
         this.setState((prevState) => ({
             data: {
                 ...prevState.data,
                 ...data
-            }
+            },
+            valid: valid,
+            errMsg: errMsg
         }));
     };
 
@@ -93,6 +97,7 @@ class Setup extends Component {
         const {activeStep} = this.state;
         this.setState({
             activeStep: activeStep + 1,
+            valid: false
         });
     };
 
@@ -100,12 +105,13 @@ class Setup extends Component {
         const {activeStep} = this.state;
         this.setState({
             activeStep: activeStep - 1,
+            valid: false
         });
     };
 
     render() {
         const {classes} = this.props;
-        const {activeStep, data} = this.state;
+        const {activeStep, data, valid, errMsg} = this.state;
 
         const nextButtonAttrs = activeStep !== steps.length - 1 ? {
             onClick: this.handleNext
@@ -134,13 +140,23 @@ class Setup extends Component {
                     ))}
                 </Stepper>
                 <div className={classes.desktopButtons}>
-                    <Button {...backButtonAttrs} className={classes.desktopButton}>
-                        {activeStep === 0 ? 'Abort' : 'Back'}
-                    </Button>
+                    {/*Wrapped in span so we can trigger tooltips if needed*/}
 
-                    <Button {...nextButtonAttrs} className={classes.desktopButton} variant="contained" color="primary">
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                    </Button>
+                    <span>
+                        <Button {...backButtonAttrs} className={classes.desktopButton}>
+                            {activeStep === 0 ? 'Abort' : 'Back'}
+                        </Button>
+                    </span>
+                    <Tooltip title={valid ? '' : errMsg} placement='top'>
+                        <span>
+                            <Button {...nextButtonAttrs}
+                                    className={classes.desktopButton}
+                                    disabled={!valid}
+                                    variant="contained" color="primary">
+                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                            </Button>
+                        </span>
+                    </Tooltip>
                 </div>
             </div>
         ) : (
