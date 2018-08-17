@@ -65,7 +65,7 @@ class Setup extends Component {
             activeStep: 0,
             data: {
                 timePer: setup.timePer || String(60 * 5),
-                showPalette: (setup.showPalette === 'true') !== false,
+                showPalette: setup.showPalette === undefined ? true : (setup.showPalette === 'true'),
                 textCategories: setup.textCategories || [],
                 textCount: parseInt(setup.textCount, 10) || 2,
                 motifCategories: setup.motifCategories || [],
