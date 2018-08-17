@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {
-    Paper,
     Typography,
     FormControlLabel,
     RadioGroup,
@@ -12,8 +11,15 @@ import {
     MenuItem,
     Input,
     Chip,
-    InputLabel
+    InputLabel,
+    ExpansionPanel,
+    ExpansionPanelSummary,
+    ExpansionPanelDetails,
+    FormLabel,
+    FormHelperText,
+    Toolbar
 } from "@material-ui/core";
+import {ExpandMore} from "@material-ui/icons";
 
 const styles = theme => ({
     layout: {
@@ -25,16 +31,8 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 9,
-        padding: theme.spacing.unit * 2,
-        [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
-            marginTop: theme.spacing.unit * 6,
-            marginBottom: theme.spacing.unit * 12,
-            padding: theme.spacing.unit * 3,
-        },
+        paddingTop: theme.spacing.unit * 3,
+        paddingBottom: theme.spacing.unit * 3
     },
     group: {
         display: 'flex',
@@ -65,6 +63,12 @@ const styles = theme => ({
     vertical: {
         display: 'flex',
         alignItems: 'center'
+    },
+    panel: {
+
+    },
+    panelDetails: {
+        flexDirection: 'column'
     }
 });
 
@@ -118,11 +122,12 @@ class SetupGeneral extends Component {
 
         return (
             <div className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <FormControl component="fieldset">
-                        <Typography variant="title" gutterBottom>
-                            Time per prompt
-                        </Typography>
+                <ExpansionPanel className={classes.panel} defaultExpanded={true}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+                        <Typography variant="title">General</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.panelDetails}>
+                        <FormLabel component="legend">How much time per prompt</FormLabel>
                         <RadioGroup
                             aria-label="Time per propmt"
                             name="timePer"
@@ -141,9 +146,13 @@ class SetupGeneral extends Component {
                                 )
                             })}
                         </RadioGroup>
-                        <Typography variant="title" gutterBottom>
-                            Colour palettes
-                        </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel className={classes.panel} defaultExpanded={true}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+                        <Typography variant="title">Colours</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.panelDetails}>
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -152,31 +161,30 @@ class SetupGeneral extends Component {
                                     value="showPalette"
                                 />
                             }
-                            label="Show a random colour palette"
+                            label="Show colour palette"
                         />
-                        <Typography variant="title" gutterBottom>
-                            Text
-                        </Typography>
-                        <div className={classes.vertical}>
-                            <Typography variant="body1">
-                                Choose
-                            </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel className={classes.panel} defaultExpanded={false}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+                        <Typography variant="title">Text</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.panelDetails}>
+                        <FormControl>
                             <Select
                                 native
                                 value={textCount}
                                 onChange={this.handleChange('textCount')}
                             >
+                                <option value={0}>none</option>
                                 <option value={1}>1 word</option>
                                 <option value={2}>2 words</option>
                                 <option value={3}>3 words</option>
                                 <option value={4}>4 words</option>
                                 <option value={5}>5 words</option>
                             </Select>
-                            <Typography variant="body1">
-                                from word categories:
-                            </Typography>
-                        </div>
-
+                            <FormHelperText>How many words to show?</FormHelperText>
+                        </FormControl>
                         <FormControl className={classes.formControl}>
                             {/*<InputLabel htmlFor="select-multiple-chip">Chip</InputLabel>*/}
                             <Select
@@ -208,10 +216,15 @@ class SetupGeneral extends Component {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <FormHelperText>Which kinds of words?</FormHelperText>
                         </FormControl>
-                        <Typography variant="title" gutterBottom>
-                            Other
-                        </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel className={classes.panel} defaultExpanded={false}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+                        <Typography variant="title">Advanced</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.panelDetails}>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor="max-quality">Max quality of images</InputLabel>
                             <Select
@@ -226,8 +239,9 @@ class SetupGeneral extends Component {
                                 <MenuItem value={'h'}>Very large</MenuItem>
                             </Select>
                         </FormControl>
-                    </FormControl>
-                </Paper>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <Toolbar/>
             </div>
         )
     }
