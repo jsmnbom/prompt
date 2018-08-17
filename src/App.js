@@ -106,7 +106,7 @@ class App extends Component {
                             <MenuItem onClick={this.handleMenuClose(() => {
                                 window.open('https://github.com/jsmnbom/prompt')
                             })}>Show source code on Github&nbsp;<Launch style={{fontSize: 18}}/></MenuItem>
-                            <MenuItem onClick={this.handleMenuClose(null)}>About</MenuItem>
+                            {/*<MenuItem onClick={this.handleMenuClose(null)}>About</MenuItem>*/}
                         </Menu>
                     </Toolbar>
                 </AppBar>
