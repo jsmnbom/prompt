@@ -121,16 +121,19 @@ class CreditDialog extends Component {
                             </Typography>
                             <Typography>
                                 <a href={`https://flickr.com/${image.owner}/${image.id}`}
+                                   rel="noopener noreferrer"
                                    target="_blank">{image.title}</a>
                                 {' '}
                                 by
                                 {' '}
                                 <a href={`https://flickr.com/${image.owner}`}
+                                   rel="noopener noreferrer"
                                    target="_blank">{image.ownername}</a>
                                 {' '}
                                 is licensed according to
                                 {' '}
                                 <a href={LICENSES[image.license].url}
+                                   rel="noopener noreferrer"
                                    target="_blank">{LICENSES[image.license].name}</a>
                                 .
                             </Typography>
@@ -146,11 +149,13 @@ class CreditDialog extends Component {
                             </Typography>
                             <Typography>
                                 <a href={currentPalette.url}
+                                   rel="noopener noreferrer"
                                    target="_blank">{currentPalette.title} by {currentPalette.userName}</a>
                                 {' '}
                                 is licensed according to
                                 {' '}
                                 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/"
+                                   rel="noopener noreferrer"
                                    target="_blank">Creative Commons Attribution-NonCommercial-ShareAlike 3.0</a>
                                 .
                             </Typography>
