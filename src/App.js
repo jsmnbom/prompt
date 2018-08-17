@@ -8,6 +8,7 @@ import {Switch, Route} from "react-router-dom";
 import Welcome from "./Welcome";
 import Setup from "./Setup";
 import Draw from "./Draw";
+import {compose} from "recompose";
 
 const styles = theme => ({
     appBar: {
@@ -32,12 +33,14 @@ const styles = theme => ({
 
 
 class App extends Component {
-    state = {
-        menuAnchor: null,
-        extraMenuItems: [],
-        extraToolbarItems: null
-    };
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuAnchor: null,
+            extraMenuItems: [],
+            extraToolbarItems: null
+        };
+    }
 
     handleMenuOpen = event => {
         this.setState({menuAnchor: event.currentTarget});
@@ -115,8 +118,10 @@ class App extends Component {
                 </Switch>
             </Fragment>
         )
-
     }
 }
 
-export default withRoot(withStyles(styles)(App));
+export default compose(
+    withRoot,
+    withStyles(styles)
+)(App);

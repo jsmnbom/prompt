@@ -1,9 +1,9 @@
 import React, {Fragment, PureComponent} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {LinearProgress, Paper, CircularProgress, IconButton, Tooltip, Toolbar, Button} from '@material-ui/core';
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {compose} from "recompose";
-import {parse} from "qs";
+import {parse, stringify} from "qs";
 import moment from "moment";
 import {categoryFromName} from "./data/motifs";
 import palettes from "./data/palettes";
@@ -73,11 +73,10 @@ class Draw extends PureComponent {
         super(props);
         const setup = parse(this.props.location.search, {ignoreQueryPrefix: true});
         this.state = {
+            setup: setup,
             timePer: parseInt(setup.timePer, 10),
+            showPalette: (setup.showPalette === 'true'),
             timePercentLeft: 100,
-            motifCategories: setup.motifCategories,
-            maxQuality: setup.maxQuality,
-            showPalette: setup.showPalette,
             currentImageHeight: 1,
             currentImageWidth: 1,
             renderLoader: false,
@@ -158,7 +157,10 @@ class Draw extends PureComponent {
                 {!this.state.renderBottomBar && (
                     <Fragment>
                         <Tooltip title="Back to settings">
-                            <IconButton onClick={() => (this.restart())}>
+                            <IconButton component={Link} to={{
+                                pathname: "/setup",
+                                search: stringify(this.state.setup)
+                            }}>
                                 <Build/>
                             </IconButton>
                         </Tooltip>
@@ -220,8 +222,8 @@ class Draw extends PureComponent {
     };
 
     restart() {
-        const image = sample(categoryFromName(sample(this.state.motifCategories)).images);
-        let allowed = ['url_h', 'url_b', 'url_z'].slice('hbz'.indexOf(this.state.maxQuality));
+        const image = sample(categoryFromName(sample(this.state.setup.motifCategories)).images);
+        let allowed = ['url_h', 'url_b', 'url_z'].slice('hbz'.indexOf(this.state.setup.maxQuality));
         let url;
         for (let v of allowed) {
             url = image[v];
@@ -294,7 +296,10 @@ class Draw extends PureComponent {
                 {renderBottomBar && (
                     <Paper className={classes.bottomBar} elevation={24}>
                         <Toolbar className={classes.bottomToolbar}>
-                            <Button size="small">
+                            <Button size="small" component={Link} to={{
+                                pathname: "/setup",
+                                search: stringify(this.state.setup)
+                            }}>
                                 <Build/>
                                 Setup
                             </Button>
@@ -317,6 +322,6 @@ class Draw extends PureComponent {
 }
 
 export default compose(
-    withStyles(styles, {withTheme: true}),
     withRouter,
+    withStyles(styles, {withTheme: true})
 )(Draw);

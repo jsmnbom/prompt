@@ -13,10 +13,10 @@ import {Copyright, KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/ico
 import {withStyles} from '@material-ui/core/styles';
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import {compose} from 'recompose';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import SetupMotifs from "./SetupMotifs";
 import SetupGeneral from "./SetupGeneral";
-import {stringify} from "qs";
+import {parse, stringify} from "qs";
 import DrawCreditDialog from "./CreditDialog";
 
 const styles = theme => ({
@@ -58,20 +58,24 @@ const styles = theme => ({
 const steps = ['General', 'Motifs'];
 
 class Setup extends Component {
-    state = {
-        activeStep: 0,
-        data: {
-            timePer: String(60 * 5),
-            showPalette: true,
-            textCategories: [],
-            textCount: 2,
-            motifCategories: [],
-            maxQuality: 'z'
-        },
-        valid: false,
-        errMsg: '',
-        creditDialogOpen: false
-    };
+    constructor(props) {
+        super(props);
+        const setup = parse(this.props.location.search, {ignoreQueryPrefix: true});
+        this.state = {
+            activeStep: 0,
+            data: {
+                timePer: setup.timePer || String(60 * 5),
+                showPalette: (setup.showPalette === 'true') !== false,
+                textCategories: setup.textCategories || [],
+                textCount: parseInt(setup.textCount, 10) || 2,
+                motifCategories: setup.motifCategories || [],
+                maxQuality: setup.maxQuality || 'z'
+            },
+            valid: false,
+            errMsg: '',
+            creditDialogOpen: false
+        };
+    }
 
     componentWillMount() {
         this.setToolbarButtons();
@@ -238,5 +242,6 @@ class Setup extends Component {
 
 export default compose(
     withStyles(styles),
-    withWidth()
+    withWidth(),
+    withRouter
 )(Setup)
