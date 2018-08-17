@@ -301,6 +301,7 @@ class Draw extends PureComponent {
                     </Paper>
                 )}
                 <DrawCreditDialog
+                    currentPalette={currentPalette}
                     currentImage={currentImage}
                     open={this.state.creditDialogOpen}
                     onClose={this.handleCreditDialogClose}

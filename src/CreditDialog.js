@@ -22,11 +22,15 @@ const styles = theme => ({
         alignItems: 'center',
         paddingTop: theme.spacing.unit,
         paddingRight: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit,
+        paddingBottom: 0,
         paddingLeft: theme.spacing.unit * 3
     },
     titleInner: {
         flexGrow: 1
+    },
+    subTitle: {
+        marginTop: theme.spacing.unit,
+        marginBottom: theme.spacing.unit / 2
     }
 });
 
@@ -83,7 +87,7 @@ class CreditDialog extends Component {
     };
 
     render() {
-        const {classes, currentImage, width, ...other} = this.props;
+        const {classes, currentImage, currentPalette, width, ...other} = this.props;
         let images = [];
 
         if (currentImage) {
@@ -112,7 +116,7 @@ class CreditDialog extends Component {
                 <DialogContent>
                     {images.map(({name, image}) => (
                         <Fragment key={name}>
-                            <Typography variant="display1">
+                            <Typography variant="display1" className={classes.subTitle}>
                                 {name}
                             </Typography>
                             <Typography>
@@ -135,6 +139,26 @@ class CreditDialog extends Component {
                             ))}
                         </Fragment>
                     ))}
+                    {currentPalette && (
+                        <Fragment>
+                            <Typography variant="display1" className={classes.subTitle}>
+                                Colour palette
+                            </Typography>
+                            <Typography>
+                                <a href={currentPalette.url}
+                                   target="_blank">{currentPalette.title} by {currentPalette.userName}</a>
+                                {' '}
+                                is licensed according to
+                                {' '}
+                                <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/"
+                                   target="_blank">Creative Commons Attribution-NonCommercial-ShareAlike 3.0</a>
+                                .
+                            </Typography>
+                            <img src={ICONS.BY} className={classes.CCIcon} alt="BY"/>
+                            <img src={ICONS.NC} className={classes.CCIcon} alt="NC"/>
+                            <img src={ICONS.SA} className={classes.CCIcon} alt="SA"/>
+                        </Fragment>
+                    )}
                 </DialogContent>
             </Dialog>
         )
