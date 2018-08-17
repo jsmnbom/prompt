@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {LinearProgress, Paper, CircularProgress} from '@material-ui/core';
+import {LinearProgress, Paper, CircularProgress, IconButton} from '@material-ui/core';
 import {withRouter} from "react-router-dom";
 import {compose} from "recompose";
 import {parse} from "qs";
@@ -8,6 +8,7 @@ import moment from "moment";
 import {categoryFromName} from "./motifs";
 import classNames from 'classnames';
 import {sample} from "lodash/collection";
+import {Pause, PlayArrow} from "@material-ui/icons";
 
 const styles = theme => ({
     timeBar: {
@@ -51,7 +52,8 @@ class Draw extends Component {
             currentImage: null,
             currentImageHeight: 1,
             currentImageWidth: 1,
-            showLoader: false
+            showLoader: false,
+            pausedAt: null //secs since start at pause time
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -60,8 +62,34 @@ class Draw extends Component {
         this.setState({windowWidth: window.innerWidth, windowHeight: window.innerHeight});
     }
 
+    togglePause = () => {
+        console.log('pause toggle', moment().diff(this.state.startTime) - this.state.pausedAt);
+        this.setState((prevState) => {
+            if (prevState.pausedAt === null) {
+                return {pausedAt: (moment().diff(prevState.startTime))};
+            } else {
+                return {
+                    pausedAt: null,
+                    startTime: prevState.startTime.add(moment().diff(this.state.startTime)- this.state.pausedAt)
+                }
+            }
+        }, () => {
+            this.setPauseButton();
+        });
+    };
+
     componentWillMount() {
         this.updateDimensions();
+        this.setPauseButton();
+    }
+
+    setPauseButton() {
+        console.log(this.state.pausedAt);
+        this.props.setExtraToolbarItems(
+            <IconButton onClick={this.togglePause}>
+                {this.state.pausedAt === null ? <Pause/> : <PlayArrow/>}
+            </IconButton>
+        );
     }
 
     componentDidMount() {
@@ -78,7 +106,8 @@ class Draw extends Component {
 
     progress = () => {
         if (!this.state.startTime || this.state.loading) return;
-        const timePercentLeft = 100 - (((moment().diff(this.state.startTime) / 1000) / this.state.timePer) * 100);
+        const milliSecPassed = this.state.pausedAt || moment().diff(this.state.startTime);
+        const timePercentLeft = 100 - (((milliSecPassed / 1000) / this.state.timePer) * 100);
 
         if (timePercentLeft <= 0) {
             this.restart();
@@ -127,7 +156,7 @@ class Draw extends Component {
         const {currentUrl, currentImageWidth, currentImageHeight, showLoader, windowHeight, windowWidth} = this.state;
 
         let dimen = {
-            height: windowHeight / 2,
+            height: windowHeight / 2, // TODO: Take appbar height and such into consideration
             width: (currentImageWidth / currentImageHeight) * (windowHeight / 2)
         };
         if (dimen.width + 8/*TODO: THEME*/ * 4 >= windowWidth) {
