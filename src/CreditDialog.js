@@ -148,6 +148,9 @@ class CreditDialog extends Component {
                                 Colour palette
                             </Typography>
                             <Typography>
+                                {currentPalette.colors.map((color) => `#${color}`).join(', ')}
+                            </Typography>
+                            <Typography>
                                 <a href={currentPalette.url}
                                    rel="noopener noreferrer"
                                    target="_blank">{currentPalette.title} by {currentPalette.userName}</a>

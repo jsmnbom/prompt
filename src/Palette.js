@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
+import {Tooltip} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -9,6 +10,9 @@ const styles = theme => ({
     },
     color: {
         flexGrow: 1
+    },
+    tooltip: {
+        fontSize: '150%'
     }
 });
 
@@ -23,10 +27,15 @@ class Palette extends Component {
                         backgroundColor: `#${color}`
                     };
                     if (palette.colorWidths) {
-                        style.flexBasis = `${palette.colorWidths[i]*100}%`
+                        style.flexBasis = `${palette.colorWidths[i] * 100}%`
                     }
+                    console.log(i);
                     return (
-                        <div key={i} style={style} className={classes.color}/>
+                        <Fragment key={i}>
+                            <Tooltip title={`#${color}`} classes={{tooltip: classes.tooltip}}>
+                                <div style={style} className={classes.color}/>
+                            </Tooltip>
+                        </Fragment>
                     )
                 })}
             </div>
