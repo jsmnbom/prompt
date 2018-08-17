@@ -8,7 +8,7 @@ const pprint = (obj) => console.log(util.inspect(obj, {showHidden: false, depth:
 
 const cli = meow(`
     Usage
-      $ images <name> <text>
+      $ flickr <name> <text>
 `);
 
 const [name, text] = cli.input;
@@ -63,20 +63,6 @@ getImages({
         name: name,
         thumb: 0
     }), 'utf8');
-    const html = `<html>
-<head>
-<title>${name}</title>
-<style>
-img {
-width: 50%;
-}
-</style>
-</head>
-<body>
-${images.map((img) => `<img src="${img.url_z}" /><p>${img.id}</p>`).join('\n')}
-</body>
-</html>`;
-    fs.writeFile(`temp/${name.toLowerCase()}.html`, html, 'utf8');
 });
 
 

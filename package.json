@@ -18,7 +18,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-transition-group": "^2.4.0",
-    "recompose": "^0.28.2"
+    "recompose": "^0.28.2",
+    "superagent": "^3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
