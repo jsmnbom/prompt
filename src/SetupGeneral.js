@@ -117,7 +117,7 @@ class SetupGeneral extends Component {
     };
 
     render() {
-        const {classes, theme, data} = this.props;
+        const {classes, theme, data, wasChanged} = this.props;
         const {timePer, showPalette, textCategories, textCount, maxQuality} = data;
 
         return (
@@ -165,7 +165,7 @@ class SetupGeneral extends Component {
                         />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-                <ExpansionPanel className={classes.panel} defaultExpanded={false}>
+                <ExpansionPanel className={classes.panel} defaultExpanded={wasChanged.text}>
                     <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
                         <Typography variant="title">Text</Typography>
                     </ExpansionPanelSummary>
@@ -220,7 +220,7 @@ class SetupGeneral extends Component {
                         </FormControl>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-                <ExpansionPanel className={classes.panel} defaultExpanded={false}>
+                <ExpansionPanel className={classes.panel} defaultExpanded={wasChanged.advanced}>
                     <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
                         <Typography variant="title">Advanced</Typography>
                     </ExpansionPanelSummary>

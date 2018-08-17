@@ -61,15 +61,29 @@ class Setup extends Component {
     constructor(props) {
         super(props);
         const setup = parse(this.props.location.search, {ignoreQueryPrefix: true});
+        const defaultData = {
+            timePer: String(60 * 5),
+            showPalette: true,
+            textCategories: [],
+            textCount: 2,
+            motifCategories: [],
+            maxQuality: 'z'
+        };
+        const data = {
+            timePer: setup.timePer || defaultData.timePer,
+            showPalette: setup.showPalette === undefined ? defaultData.showPalette : (setup.showPalette === 'true'),
+            textCategories: setup.textCategories || defaultData.textCategories,
+            textCount: parseInt(setup.textCount, 10) || defaultData.textCount,
+            motifCategories: setup.motifCategories || defaultData.motifCategories,
+            maxQuality: setup.maxQuality || defaultData.maxQuality
+        };
+
         this.state = {
             activeStep: 0,
-            data: {
-                timePer: setup.timePer || String(60 * 5),
-                showPalette: setup.showPalette === undefined ? true : (setup.showPalette === 'true'),
-                textCategories: setup.textCategories || [],
-                textCount: parseInt(setup.textCount, 10) || 2,
-                motifCategories: setup.motifCategories || [],
-                maxQuality: setup.maxQuality || 'z'
+            data: data,
+            wasChanged: {
+                text: data.textCategories !== defaultData.textCategories || data.textCount !== defaultData.textCount,
+                advanced: data.maxQuality !== defaultData.maxQuality
             },
             valid: false,
             errMsg: '',
@@ -121,9 +135,12 @@ class Setup extends Component {
     getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <SetupGeneral data={this.state.data} updateData={this.updateData}/>;
+                return <SetupGeneral data={this.state.data}
+                                     updateData={this.updateData}
+                                     wasChanged={this.state.wasChanged}/>;
             case 1:
-                return <SetupMotifs data={this.state.data} updateData={this.updateData}/>;
+                return <SetupMotifs data={this.state.data}
+                                    updateData={this.updateData}/>;
             default:
                 throw new Error('Unknown step');
         }
