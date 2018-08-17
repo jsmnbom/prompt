@@ -36,6 +36,14 @@ const styles = theme => ({
 });
 
 class Welcome extends Component {
+    componentWillMount() {
+        this.setToolbarButtons();
+    }
+
+    setToolbarButtons() {
+        this.props.setExtraToolbarItems();
+    }
+
     render() {
         const {classes} = this.props;
         return (

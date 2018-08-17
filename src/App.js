@@ -54,7 +54,6 @@ class App extends Component {
     }
 
     setExtraToolbarItems(toolbarItems) {
-        console.log(toolbarItems);
         this.setState({extraToolbarItems: toolbarItems});
     }
 

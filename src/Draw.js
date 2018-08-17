@@ -44,7 +44,6 @@ class Draw extends PureComponent {
     constructor(props) {
         super(props);
         const setup = parse(this.props.location.search, {ignoreQueryPrefix: true});
-        console.log('constructor');
         this.state = {
             timePer: parseInt(setup.timePer, 10),
             timePercentLeft: 100,
@@ -86,7 +85,6 @@ class Draw extends PureComponent {
     }
 
     setToolbarButtons() {
-        console.log(this.state.pausedAt);
         this.props.setExtraToolbarItems(
             <Fragment>
                 <Tooltip title="Skip">
@@ -187,26 +185,26 @@ class Draw extends PureComponent {
 
         const topBarHeightAndMargin = (theme.spacing.unit + appBarHeight + theme.spacing.unit * 2);
 
-        let height = (windowHeight - topBarHeightAndMargin) * 0.75; // Dedicate 3/4 to image
-        let width = (currentImageWidth / currentImageHeight) * height;
-        if (width + theme.spacing.unit * 4 >= windowWidth) {
-            width = windowWidth - theme.spacing.unit * 4;
-            height = (currentImageHeight / currentImageWidth) * width;
+        let imgHeight = (windowHeight - topBarHeightAndMargin) * 0.75; // Dedicate 3/4 to image
+        let imgWidth = (currentImageWidth / currentImageHeight) * imgHeight;
+        if (imgWidth + theme.spacing.unit * 4 >= windowWidth) {
+            imgWidth = windowWidth - theme.spacing.unit * 4;
+            imgHeight = (currentImageHeight / currentImageWidth) * imgWidth;
         }
 
-        const style = {
-            width: width,
-            height: height
+        const imgStyle = {
+            width: imgWidth,
+            height: imgHeight
         };
 
         return (
             <Fragment>
                 <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
                                 value={this.state.timePercentLeft} classes={{bar: classes.timeInnnerBar}}/>
-                <Paper className={classes.paper} style={style}>
+                <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (
                         <Fragment>
-                            <img src={currentUrl} onLoad={this.handleLoad} style={style}
+                            <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
                                  className={classNames({[classes.dimmed]: showLoader})}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
                         </Fragment>

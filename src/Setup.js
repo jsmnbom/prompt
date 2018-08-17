@@ -71,6 +71,14 @@ class Setup extends Component {
         errMsg: ''
     };
 
+    componentWillMount() {
+        this.setToolbarButtons();
+    }
+
+    setToolbarButtons() {
+        this.props.setExtraToolbarItems();
+    }
+
     updateData = (data, valid, errMsg) => {
         this.setState((prevState) => ({
             data: {
