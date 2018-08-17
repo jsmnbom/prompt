@@ -1,5 +1,6 @@
 import React from "react";
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import {purple, green} from '@material-ui/core/colors'
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 
