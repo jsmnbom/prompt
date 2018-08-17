@@ -22,6 +22,12 @@ import SkipNext from "@material-ui/icons/SkipNext";
 import Build from "@material-ui/icons/Build";
 import DrawCreditDialog from "./CreditDialog";
 import Palette from "./Palette";
+import sampleSize from "lodash/sampleSize";
+import WORDS from './data/words'
+import Words from "./Words";
+
+const makeRepeated = (arr, repeats) =>
+    [].concat(...Array.from({length: repeats}, () => arr));
 
 const styles = theme => ({
     timeBar: {
@@ -61,9 +67,8 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    palettePaper: {
+    justifiedPaper: {
         display: 'flex',
-        height: theme.spacing.unit * 6,
         width: 'auto',
         marginLeft: theme.spacing.unit * 2,
         marginRight: theme.spacing.unit * 2,
@@ -72,6 +77,12 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         }
+    },
+    wordsDiv: {
+        flexGrow: 1
+    },
+    palettePaper: {
+        height: theme.spacing.unit * 6,
     }
 });
 
@@ -86,6 +97,7 @@ class Draw extends Component {
             setup: setup,
             timePer: setup.timePer === 'inf' ? null : parseInt(setup.timePer, 10),
             showPalette: (setup.showPalette === 'true'),
+            showWords: (setup.wordCount > 0 && setup.wordCategories.length > 0),
             timePercentLeft: 100,
             currentImageHeight: 1,
             currentImageWidth: 1,
@@ -93,6 +105,7 @@ class Draw extends Component {
             pausedAt: null, //secs since start at pause time,
             creditDialogOpen: false
         };
+        this.wordsRef = React.createRef();
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
@@ -121,6 +134,13 @@ class Draw extends Component {
                 const paletteHeight = theme.spacing.unit * 6;
                 const paletteMargin = theme.spacing.unit * 2;
                 otherHeight += paletteHeight + paletteMargin;
+            }
+
+            if (this.state.showWords) {
+                const wordsRef = (extraState && extraState.wordsRef) || prevState.wordsRef;
+                const wordsHeight = wordsRef ? wordsRef.getBoundingClientRect().height : theme.spacing.unit * 2;
+                const wordsMargin = theme.spacing.unit * 2;
+                otherHeight += wordsHeight + wordsMargin;
             }
 
             let imgHeight = (window.innerHeight - otherHeight);
@@ -267,13 +287,28 @@ class Draw extends Component {
 
         const palette = this.state.showPalette ? sample(palettes.palettes) : null;
 
+        let words;
+
+        if (this.state.showWords) {
+            let categories = this.state.setup.wordCategories;
+            if (categories.length < this.state.setup.wordCount) categories = makeRepeated(categories, Math.ceil(this.state.setup.wordCount / categories.length));
+            words = sampleSize(categories, this.state.setup.wordCount).map(x => sample(WORDS.categories[x].words).toLowerCase())
+        }
+
         this.updateDimensions({
             startTime: dayjs(),
+            currentWords: words,
             loading: false,
             currentImageWidth: img.target.naturalWidth,
             currentImageHeight: img.target.naturalHeight,
             renderLoader: false,
             currentPalette: palette
+        });
+    };
+
+    setWordsRef = (element) => {
+        this.updateDimensions({
+            wordsRef: element
         });
     };
 
@@ -283,7 +318,7 @@ class Draw extends Component {
 
     render() {
         const {classes} = this.props;
-        const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar} = this.state;
+        const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar, currentWords} = this.state;
 
         const imgStyle = {
             width: renderImageWidth,
@@ -298,12 +333,18 @@ class Draw extends Component {
                 )}
 
                 {currentPalette && (
-                    <Paper className={classNames(classes.paper, classes.palettePaper)}>
+                    <Paper className={classNames(classes.paper, classes.justifiedPaper, classes.palettePaper)}>
                         <Palette palette={currentPalette}/>
                     </Paper>
                 )}
 
-
+                {currentWords && (
+                    <Paper className={classNames(classes.paper, classes.justifiedPaper)}>
+                        <div ref={this.setWordsRef} className={classes.wordsDiv}>
+                            <Words words={currentWords}/>
+                        </div>
+                    </Paper>
+                )}
 
                 <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (

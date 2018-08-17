@@ -66,7 +66,7 @@ class Setup extends Component {
             timePer: String(60 * 5),
             showPalette: true,
             wordCategories: [],
-            wordCount: 2,
+            wordCount: 3,
             motifCategories: [],
             maxQuality: 'z'
         };
