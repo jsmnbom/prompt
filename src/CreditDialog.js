@@ -10,7 +10,7 @@ import NC from './img/nc.svg'
 import ND from './img/nd.svg'
 import SA from './img/sa.svg'
 import ZERO from './img/zero.svg'
-import categories from "./motifs";
+import categories from "./data/motifs";
 
 const styles = theme => ({
     CCIcon: {
