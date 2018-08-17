@@ -327,13 +327,13 @@ class Draw extends Component {
                                 Setup
                             </Button>
                             {(this.state.timePer) && (
-                                <Button size="small" onClick={() => (this.restart())}>
+                                <Button size="small" onClick={this.restart}>
                                     Skip
                                     <SkipNext/>
                                 </Button>
                             )}
                             {(!this.state.timePer) && (
-                                <Button size="small" onClick={() => (this.restart())}>
+                                <Button size="small" onClick={this.restart}>
                                     Next
                                     <SkipNext/>
                                 </Button>
