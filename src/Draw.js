@@ -255,6 +255,10 @@ class Draw extends PureComponent {
         });
     };
 
+    handleError = (img) => {
+        console.log('ERROR', img)
+    };
+
     render() {
         const {classes} = this.props;
         const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar} = this.state;
@@ -277,6 +281,7 @@ class Draw extends PureComponent {
                     {currentUrl && (
                         <Fragment>
                             <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
+                                 onError={this.handleError}
                                  className={classNames({[classes.dimmed]: renderLoader})}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
                         </Fragment>
