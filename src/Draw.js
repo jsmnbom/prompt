@@ -240,7 +240,7 @@ class Draw extends Component {
         })
     };
 
-    restart() {
+    restart = () => {
         const image = sample(categoryFromName(sample(this.state.setup.motifCategories)).images);
         let allowed = ['url_h', 'url_b', 'url_z'].slice('hbz'.indexOf(this.state.setup.maxQuality));
         let url;
@@ -259,7 +259,7 @@ class Draw extends Component {
                 });
             }, 1000)
         });
-    }
+    };
 
     handleLoad = (img) => {
         clearTimeout(this.loadingTimer);
