@@ -15,7 +15,7 @@ const styles = theme => ({
     timeBar: {
         height: theme.spacing.unit
     },
-    timeInnnerBar: {
+    timeInnerBar: {
         transition: 'none'
     },
     paper: {
@@ -64,7 +64,6 @@ class Draw extends PureComponent {
     }
 
     togglePause = () => {
-        console.log('pause toggle', moment().diff(this.state.startTime) - this.state.pausedAt);
         this.setState((prevState) => {
             if (prevState.pausedAt === null) {
                 return {pausedAt: (moment().diff(prevState.startTime))};
@@ -164,7 +163,6 @@ class Draw extends PureComponent {
     }
 
     handleLoad = (img) => {
-        console.log(img.target);
         clearTimeout(this.loadingTimer);
         this.setState({
             startTime: moment(),
@@ -200,7 +198,7 @@ class Draw extends PureComponent {
         return (
             <Fragment>
                 <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
-                                value={this.state.timePercentLeft} classes={{bar: classes.timeInnnerBar}}/>
+                                value={this.state.timePercentLeft} classes={{bar: classes.timeInnerBar}}/>
                 <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (
                         <Fragment>

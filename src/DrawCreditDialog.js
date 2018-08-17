@@ -83,7 +83,6 @@ class DrawCreditDialog extends Component {
 
     render() {
         const {classes, currentImage, width, ...other} = this.props;
-        console.log(width);
 
         const license = LICENSES[currentImage.license];
 

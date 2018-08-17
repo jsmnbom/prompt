@@ -49,7 +49,6 @@ class App extends Component {
     };
 
     setExtraMenuItems(menuItems) {
-        console.log(menuItems);
         this.setState({extraMenuItems: menuItems});
     }
 
