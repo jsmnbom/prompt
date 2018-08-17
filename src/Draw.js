@@ -241,6 +241,7 @@ class Draw extends Component {
     };
 
     restart = () => {
+        if (this.state.loading) return;
         const image = sample(categoryFromName(sample(this.state.setup.motifCategories)).images);
         let allowed = ['url_h', 'url_b', 'url_z'].slice('hbz'.indexOf(this.state.setup.maxQuality));
         let url;
