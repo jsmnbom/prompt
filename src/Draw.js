@@ -74,7 +74,7 @@ class Draw extends PureComponent {
         const setup = parse(this.props.location.search, {ignoreQueryPrefix: true});
         this.state = {
             setup: setup,
-            timePer: parseInt(setup.timePer, 10),
+            timePer: setup.timePer === 'inf' ? null : parseInt(setup.timePer, 10),
             showPalette: (setup.showPalette === 'true'),
             timePercentLeft: 100,
             currentImageHeight: 1,
@@ -100,7 +100,7 @@ class Draw extends PureComponent {
             if (window.innerWidth > theme.breakpoints.values.xs && landscape) appBarHeight = 48;
             if (window.innerWidth > theme.breakpoints.values.sm) appBarHeight = 64;
 
-            const timerHeight = theme.spacing.unit;
+            const timerHeight = this.state.timePer ? theme.spacing.unit : 0;
             const topMargin = theme.spacing.unit * 2;
             const bottomMargin = theme.spacing.unit * 2;
             const bottomBar = renderBottomBar ? appBarHeight : 0;
@@ -155,43 +155,52 @@ class Draw extends PureComponent {
         this.props.setExtraToolbarItems(
             <Fragment>
                 {!this.state.renderBottomBar && (
-                    <Fragment>
-                        <Tooltip title="Back to settings">
-                            <IconButton component={Link} to={{
-                                pathname: "/setup",
-                                search: stringify(this.state.setup)
-                            }}>
-                                <Build/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Skip">
-                            <IconButton onClick={() => (this.restart())}>
-                                <SkipNext/>
-                            </IconButton>
-                        </Tooltip>
-                    </Fragment>
+                    <Tooltip title="Back to settings">
+                        <IconButton component={Link} to={{
+                            pathname: "/setup",
+                            search: stringify(this.state.setup)
+                        }}>
+                            <Build/>
+                        </IconButton>
+                    </Tooltip>
+                )}
+                {(!this.state.renderBottomBar && this.state.timePer) && (
+                    <Tooltip title="Skip">
+                        <IconButton onClick={() => (this.restart())}>
+                            <SkipNext/>
+                        </IconButton>
+                    </Tooltip>
+                )}
+                {(!this.state.renderBottomBar && !this.state.timePer) && (
+                    <Tooltip title="Next">
+                        <IconButton onClick={() => (this.restart())}>
+                            <SkipNext/>
+                        </IconButton>
+                    </Tooltip>
                 )}
                 <Tooltip title="Show image and palette credit">
                     <IconButton onClick={this.openCreditDialog}>
                         <Copyright/>
                     </IconButton>
                 </Tooltip>
-                <IconButton onClick={this.togglePause}>
-                    {this.state.pausedAt === null ? <Pause/> : <PlayArrow/>}
-                </IconButton>
+                {(this.state.timePer) && (
+                    <IconButton onClick={this.togglePause}>
+                        {this.state.pausedAt === null ? <Pause/> : <PlayArrow/>}
+                    </IconButton>
+                )}
             </Fragment>
         );
     }
 
     componentDidMount() {
         window.addEventListener("resize", this.updateDimensions);
-        this.mainTimer = setInterval(this.progress, 200);
+        if (this.state.timePer) this.mainTimer = setInterval(this.progress, 200);
         this.restart()
     }
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
-        clearInterval(this.mainTimer);
+        if (this.state.timePer) clearInterval(this.mainTimer);
         clearTimeout(this.loadingTimer);
     }
 
@@ -272,8 +281,10 @@ class Draw extends PureComponent {
 
         return (
             <Fragment>
-                <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
-                                value={this.state.timePercentLeft} classes={{bar: classes.timeInnerBar}}/>
+                {(this.state.timePer) && (
+                    <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
+                                    value={this.state.timePercentLeft} classes={{bar: classes.timeInnerBar}}/>
+                )}
                 {currentPalette && (
                     <Paper className={classNames(classes.paper, classes.palettePaper)}>
                         <Palette palette={currentPalette}/>
@@ -303,10 +314,18 @@ class Draw extends PureComponent {
                                 <Build/>
                                 Setup
                             </Button>
-                            <Button size="small" onClick={() => (this.restart())}>
-                                Skip
-                                <SkipNext/>
-                            </Button>
+                            {(this.state.timePer) && (
+                                <Button size="small" onClick={() => (this.restart())}>
+                                    Skip
+                                    <SkipNext/>
+                                </Button>
+                            )}
+                            {(!this.state.timePer) && (
+                                <Button size="small" onClick={() => (this.restart())}>
+                                    Next
+                                    <SkipNext/>
+                                </Button>
+                            )}
                         </Toolbar>
                     </Paper>
                 )}
