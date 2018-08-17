@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react';
+import React, {Fragment, PureComponent} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {LinearProgress, Paper, CircularProgress, IconButton} from '@material-ui/core';
+import {LinearProgress, Paper, CircularProgress, IconButton, Tooltip} from '@material-ui/core';
 import {withRouter} from "react-router-dom";
 import {compose} from "recompose";
 import {parse} from "qs";
@@ -8,7 +8,8 @@ import moment from "moment";
 import {categoryFromName} from "./motifs";
 import classNames from 'classnames';
 import {sample} from "lodash/collection";
-import {Pause, PlayArrow} from "@material-ui/icons";
+import {Pause, PlayArrow, Copyright, SkipNext} from "@material-ui/icons";
+import DrawCreditDialog from "./DrawCreditDialog";
 
 const styles = theme => ({
     timeBar: {
@@ -36,7 +37,7 @@ const styles = theme => ({
     }
 });
 
-class Draw extends Component {
+class Draw extends PureComponent {
     mainTimer = null;
     loadingTimer = null;
 
@@ -53,7 +54,8 @@ class Draw extends Component {
             currentImageHeight: 1,
             currentImageWidth: 1,
             showLoader: false,
-            pausedAt: null //secs since start at pause time
+            pausedAt: null, //secs since start at pause time,
+            creditDialogOpen: false
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -70,25 +72,37 @@ class Draw extends Component {
             } else {
                 return {
                     pausedAt: null,
-                    startTime: prevState.startTime.add(moment().diff(this.state.startTime)- this.state.pausedAt)
+                    startTime: prevState.startTime.add(moment().diff(this.state.startTime) - this.state.pausedAt)
                 }
             }
         }, () => {
-            this.setPauseButton();
+            this.setToolbarButtons();
         });
     };
 
     componentWillMount() {
         this.updateDimensions();
-        this.setPauseButton();
+        this.setToolbarButtons();
     }
 
-    setPauseButton() {
+    setToolbarButtons() {
         console.log(this.state.pausedAt);
         this.props.setExtraToolbarItems(
-            <IconButton onClick={this.togglePause}>
-                {this.state.pausedAt === null ? <Pause/> : <PlayArrow/>}
-            </IconButton>
+            <Fragment>
+                <Tooltip title="Skip">
+                    <IconButton onClick={() => (this.restart())}>
+                        <SkipNext/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Show image and palette credit">
+                    <IconButton onClick={this.openCreditDialog}>
+                        <Copyright/>
+                    </IconButton>
+                </Tooltip>
+                <IconButton onClick={this.togglePause}>
+                    {this.state.pausedAt === null ? <Pause/> : <PlayArrow/>}
+                </IconButton>
+            </Fragment>
         );
     }
 
@@ -115,6 +129,18 @@ class Draw extends Component {
 
         this.setState({
             timePercentLeft: timePercentLeft
+        })
+    };
+
+    openCreditDialog = () => {
+        this.setState({
+            creditDialogOpen: true
+        })
+    };
+
+    handleCreditDialogClose = () => {
+        this.setState({
+            creditDialogOpen: false
         })
     };
 
@@ -153,7 +179,7 @@ class Draw extends Component {
 
     render() {
         const {classes} = this.props;
-        const {currentUrl, currentImageWidth, currentImageHeight, showLoader, windowHeight, windowWidth} = this.state;
+        const {currentImage, currentUrl, currentImageWidth, currentImageHeight, showLoader, windowHeight, windowWidth} = this.state;
 
         let dimen = {
             height: windowHeight / 2, // TODO: Take appbar height and such into consideration
@@ -172,13 +198,21 @@ class Draw extends Component {
                                 value={this.state.timePercentLeft} classes={{bar: classes.timeInnnerBar}}/>
                 <Paper className={classes.paper} style={dimen}>
                     {currentUrl && (
-                        <img src={currentUrl} onLoad={this.handleLoad} style={dimen}
-                             className={classNames({[classes.dimmed]: showLoader})}/>
+                        <Fragment>
+                            <img src={currentUrl} onLoad={this.handleLoad} style={dimen}
+                                 className={classNames({[classes.dimmed]: showLoader})}
+                                 alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
+                        </Fragment>
                     )}
                     {showLoader && (
                         <CircularProgress className={classes.loader}/>
                     )}
                 </Paper>
+                <DrawCreditDialog
+                    currentImage={currentImage}
+                    open={this.state.creditDialogOpen}
+                    onClose={this.handleCreditDialogClose}
+                />
 
             </Fragment>
         )
