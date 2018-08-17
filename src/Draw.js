@@ -296,11 +296,15 @@ class Draw extends Component {
                     <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
                                     value={this.state.timePercentLeft} classes={{bar: classes.timeInnerBar}}/>
                 )}
+
                 {currentPalette && (
                     <Paper className={classNames(classes.paper, classes.palettePaper)}>
                         <Palette palette={currentPalette}/>
                     </Paper>
                 )}
+
+
+
                 <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (
                         <Fragment>

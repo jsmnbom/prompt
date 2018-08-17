@@ -65,16 +65,16 @@ class Setup extends Component {
         const defaultData = {
             timePer: String(60 * 5),
             showPalette: true,
-            textCategories: [],
-            textCount: 2,
+            wordCategories: [],
+            wordCount: 2,
             motifCategories: [],
             maxQuality: 'z'
         };
         const data = {
             timePer: setup.timePer || defaultData.timePer,
             showPalette: setup.showPalette === undefined ? defaultData.showPalette : (setup.showPalette === 'true'),
-            textCategories: setup.textCategories || defaultData.textCategories,
-            textCount: parseInt(setup.textCount, 10) || defaultData.textCount,
+            wordCategories: setup.wordCategories || defaultData.wordCategories,
+            wordCount: parseInt(setup.wordCount, 10) || defaultData.wordCount,
             motifCategories: setup.motifCategories || defaultData.motifCategories,
             maxQuality: setup.maxQuality || defaultData.maxQuality
         };
@@ -83,7 +83,7 @@ class Setup extends Component {
             activeStep: 0,
             data: data,
             wasChanged: {
-                text: data.textCategories !== defaultData.textCategories || data.textCount !== defaultData.textCount,
+                words: data.wordCategories !== defaultData.wordCategories || data.wordCount !== defaultData.wordCount,
                 advanced: data.maxQuality !== defaultData.maxQuality
             },
             valid: false,

@@ -9,15 +9,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
-import Chip from "@material-ui/core/Chip";
 import InputLabel from "@material-ui/core/InputLabel";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ListItemText from "@material-ui/core/ListItemText";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Toolbar from "@material-ui/core/Toolbar";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import words from './data/words';
 
 const styles = theme => ({
     layout: {
@@ -62,9 +63,7 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center'
     },
-    panel: {
-
-    },
+    panel: {},
     panelDetails: {
         flexDirection: 'column'
     }
@@ -83,10 +82,6 @@ const TIMES = [
     [60 * 30, '30 min'],
     [60 * 45, '45 min'],
     [60 * 60, '60 min'],
-];
-
-const TEXT_CATEGORIES = [
-    'Feelings', 'Time', 'Taste', 'Appearence', 'Size', 'Age', 'Shape', 'Material', 'Motion'
 ];
 
 const ITEM_HEIGHT = 48;
@@ -115,8 +110,8 @@ class SetupGeneral extends Component {
     };
 
     render() {
-        const {classes, theme, data, wasChanged} = this.props;
-        const {timePer, showPalette, textCategories, textCount, maxQuality} = data;
+        const {classes, data, wasChanged} = this.props;
+        const {timePer, showPalette, wordCategories, wordCount, maxQuality} = data;
 
         return (
             <div className={classes.layout}>
@@ -163,16 +158,16 @@ class SetupGeneral extends Component {
                         />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-                <ExpansionPanel className={classes.panel} defaultExpanded={wasChanged.text}>
+                <ExpansionPanel className={classes.panel} defaultExpanded={wasChanged.words}>
                     <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
-                        <Typography variant="title">Text</Typography>
+                        <Typography variant="title">Words</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails className={classes.panelDetails}>
                         <FormControl>
                             <Select
                                 native
-                                value={textCount}
-                                onChange={this.handleChange('textCount')}
+                                value={wordCount}
+                                onChange={this.handleChange('wordCount')}
                             >
                                 <option value={0}>none</option>
                                 <option value={1}>1 word</option>
@@ -187,30 +182,22 @@ class SetupGeneral extends Component {
                             {/*<InputLabel htmlFor="select-multiple-chip">Chip</InputLabel>*/}
                             <Select
                                 multiple
-                                value={textCategories}
-                                onChange={this.handleChange('textCategories')}
+                                value={wordCategories}
+                                onChange={this.handleChange('wordCategories')}
                                 input={<Input id="select-multiple-chip"/>}
-                                renderValue={selected => (
-                                    <div className={classes.chips}>
-                                        {selected.map(value => (
-                                            <Chip key={value} label={value} className={classes.chip}/>
-                                        ))}
-                                    </div>
-                                )}
+                                renderValue={selected => selected.map(value => words.categories[value].name).join(', ')}
                                 MenuProps={MenuProps}
                             >
-                                {TEXT_CATEGORIES.map(category => (
+                                {Object.entries(words.categories).map(([key, val]) => (
                                     <MenuItem
-                                        key={category}
-                                        value={category}
-                                        style={{
-                                            fontWeight:
-                                                textCategories.indexOf(category) === -1
-                                                    ? theme.typography.fontWeightRegular
-                                                    : theme.typography.fontWeightMedium,
-                                        }}
+                                        key={key}
+                                        value={key}
                                     >
-                                        {category}
+                                        <Checkbox checked={wordCategories.indexOf(key) !== -1}/>
+                                        <ListItemText
+                                            primary={val.name}
+                                            secondary={`${val.words.slice(0, 4).map(x => x.toLowerCase()).join(', ')}`}
+                                        />
                                     </MenuItem>
                                 ))}
                             </Select>
