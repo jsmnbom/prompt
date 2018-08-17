@@ -19,7 +19,7 @@ const styles = theme => ({
         transition: 'none'
     },
     paper: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 2,
         marginLeft: 'auto',
         marginRight: 'auto',
         position: 'relative'
@@ -178,28 +178,35 @@ class Draw extends PureComponent {
     };
 
     render() {
-        const {classes} = this.props;
+        const {classes, theme} = this.props;
         const {currentImage, currentUrl, currentImageWidth, currentImageHeight, showLoader, windowHeight, windowWidth} = this.state;
 
-        let dimen = {
-            height: windowHeight / 2, // TODO: Take appbar height and such into consideration
-            width: (currentImageWidth / currentImageHeight) * (windowHeight / 2)
-        };
-        if (dimen.width + 8/*TODO: THEME*/ * 4 >= windowWidth) {
-            dimen = {
-                height: (currentImageHeight / currentImageWidth) * (windowWidth - 8 * 4),
-                width: windowWidth - 8 * 4
-            }
+        let appBarHeight = 56;
+        if (window.matchMedia(`${theme.breakpoints.up('xs')} and (orientation: landscape)`).matches) appBarHeight = 48;
+        if (window.matchMedia(`${theme.breakpoints.up('sm')}`).matches) appBarHeight = 64;
+
+        const topBarHeightAndMargin = (theme.spacing.unit + appBarHeight + theme.spacing.unit * 2);
+
+        let height = (windowHeight - topBarHeightAndMargin) * 0.75; // Dedicate 3/4 to image
+        let width = (currentImageWidth / currentImageHeight) * height;
+        if (width + theme.spacing.unit * 4 >= windowWidth) {
+            width = windowWidth - theme.spacing.unit * 4;
+            height = (currentImageHeight / currentImageWidth) * width;
         }
+
+        const style = {
+            width: width,
+            height: height
+        };
 
         return (
             <Fragment>
                 <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
                                 value={this.state.timePercentLeft} classes={{bar: classes.timeInnnerBar}}/>
-                <Paper className={classes.paper} style={dimen}>
+                <Paper className={classes.paper} style={style}>
                     {currentUrl && (
                         <Fragment>
-                            <img src={currentUrl} onLoad={this.handleLoad} style={dimen}
+                            <img src={currentUrl} onLoad={this.handleLoad} style={style}
                                  className={classNames({[classes.dimmed]: showLoader})}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
                         </Fragment>
@@ -220,6 +227,6 @@ class Draw extends PureComponent {
 }
 
 export default compose(
-    withStyles(styles),
+    withStyles(styles, {withTheme: true}),
     withRouter,
 )(Draw);
