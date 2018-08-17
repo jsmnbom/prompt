@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {LinearProgress, Paper, CircularProgress, IconButton, Tooltip} from '@material-ui/core';
+import {LinearProgress, Paper, CircularProgress, IconButton, Tooltip, Toolbar, Button} from '@material-ui/core';
 import {withRouter} from "react-router-dom";
 import {compose} from "recompose";
 import {parse} from "qs";
@@ -8,7 +8,7 @@ import moment from "moment";
 import {categoryFromName} from "./motifs";
 import classNames from 'classnames';
 import {sample} from "lodash/collection";
-import {Pause, PlayArrow, Copyright, SkipNext} from "@material-ui/icons";
+import {Pause, PlayArrow, Copyright, SkipNext, Build} from "@material-ui/icons";
 import DrawCreditDialog from "./DrawCreditDialog";
 
 const styles = theme => ({
@@ -34,6 +34,20 @@ const styles = theme => ({
     },
     dimmed: {
         filter: 'brightness(50%)'
+    },
+    bottomBar: {
+        width: '100%',
+        position: 'fixed',
+        bottom: 0,
+        zIndex: 100
+    },
+    bottomToolbar: {
+        paddingLeft: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 });
 
@@ -52,15 +66,49 @@ class Draw extends PureComponent {
             currentImage: null,
             currentImageHeight: 1,
             currentImageWidth: 1,
-            showLoader: false,
+            renderLoader: false,
             pausedAt: null, //secs since start at pause time,
             creditDialogOpen: false
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
-    updateDimensions() {
-        this.setState({windowWidth: window.innerWidth, windowHeight: window.innerHeight});
+    updateDimensions(extraState) {
+        this.setState((prevState) => {
+            const {theme} = this.props;
+            const currentImageWidth = (extraState && extraState.currentImageWidth) || prevState.currentImageWidth;
+            const currentImageHeight = (extraState && extraState.currentImageHeight) || prevState.currentImageHeight;
+
+            const landscape = window.matchMedia('(orientation: landscape)').matches;
+
+            const renderBottomBar = (window.innerWidth < theme.breakpoints.values.sm) && !landscape;
+
+            let appBarHeight = 56;
+            if (window.innerWidth > theme.breakpoints.values.sm && landscape) appBarHeight = 48;
+            if (window.innerWidth > theme.breakpoints.values.md) appBarHeight = 64;
+
+            const timerHeight = theme.spacing.unit;
+            const topPadding = theme.spacing.unit * 2;
+            const bottomBar = renderBottomBar ? appBarHeight : 0;
+
+            const otherHeight = appBarHeight + timerHeight + topPadding + bottomBar;
+
+            let imgHeight = (window.innerHeight - otherHeight) * 0.75; // Dedicate 3/4 to image
+            let imgWidth = (currentImageWidth / currentImageHeight) * imgHeight;
+            if (imgWidth + theme.spacing.unit * 4 >= window.innerWidth) {
+                imgWidth = window.innerWidth - theme.spacing.unit * 4;
+                imgHeight = (currentImageHeight / currentImageWidth) * imgWidth;
+            }
+
+            return {
+                ...extraState,
+                renderImageWidth: imgWidth,
+                renderImageHeight: imgHeight,
+                renderBottomBar
+            }
+        }, () => {
+            this.setToolbarButtons();
+        });
     }
 
     togglePause = () => {
@@ -86,11 +134,20 @@ class Draw extends PureComponent {
     setToolbarButtons() {
         this.props.setExtraToolbarItems(
             <Fragment>
-                <Tooltip title="Skip">
-                    <IconButton onClick={() => (this.restart())}>
-                        <SkipNext/>
-                    </IconButton>
-                </Tooltip>
+                {!this.state.renderBottomBar && (
+                    <Fragment>
+                        <Tooltip title="Back to settings">
+                            <IconButton onClick={() => (this.restart())}>
+                                <Build/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Skip">
+                            <IconButton onClick={() => (this.restart())}>
+                                <SkipNext/>
+                            </IconButton>
+                        </Tooltip>
+                    </Fragment>
+                )}
                 <Tooltip title="Show image and palette credit">
                     <IconButton onClick={this.openCreditDialog}>
                         <Copyright/>
@@ -156,7 +213,7 @@ class Draw extends PureComponent {
         }, () => {
             this.loadingTimer = setTimeout(() => {
                 this.setState({
-                    showLoader: true
+                    renderLoader: true
                 });
             }, 1000)
         });
@@ -164,35 +221,22 @@ class Draw extends PureComponent {
 
     handleLoad = (img) => {
         clearTimeout(this.loadingTimer);
-        this.setState({
+        this.updateDimensions({
             startTime: moment(),
             loading: false,
             currentImageWidth: img.target.naturalWidth,
             currentImageHeight: img.target.naturalHeight,
-            showLoader: false
+            renderLoader: false
         });
     };
 
     render() {
-        const {classes, theme} = this.props;
-        const {currentImage, currentUrl, currentImageWidth, currentImageHeight, showLoader, windowHeight, windowWidth} = this.state;
-
-        let appBarHeight = 56;
-        if (window.matchMedia(`${theme.breakpoints.up('xs')} and (orientation: landscape)`).matches) appBarHeight = 48;
-        if (window.matchMedia(`${theme.breakpoints.up('sm')}`).matches) appBarHeight = 64;
-
-        const topBarHeightAndMargin = (theme.spacing.unit + appBarHeight + theme.spacing.unit * 2);
-
-        let imgHeight = (windowHeight - topBarHeightAndMargin) * 0.75; // Dedicate 3/4 to image
-        let imgWidth = (currentImageWidth / currentImageHeight) * imgHeight;
-        if (imgWidth + theme.spacing.unit * 4 >= windowWidth) {
-            imgWidth = windowWidth - theme.spacing.unit * 4;
-            imgHeight = (currentImageHeight / currentImageWidth) * imgWidth;
-        }
+        const {classes} = this.props;
+        const {currentImage, currentUrl, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar} = this.state;
 
         const imgStyle = {
-            width: imgWidth,
-            height: imgHeight
+            width: renderImageWidth,
+            height: renderImageHeight
         };
 
         return (
@@ -203,20 +247,33 @@ class Draw extends PureComponent {
                     {currentUrl && (
                         <Fragment>
                             <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
-                                 className={classNames({[classes.dimmed]: showLoader})}
+                                 className={classNames({[classes.dimmed]: renderLoader})}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
                         </Fragment>
                     )}
-                    {showLoader && (
+                    {renderLoader && (
                         <CircularProgress className={classes.loader}/>
                     )}
                 </Paper>
+                {renderBottomBar && (
+                    <Paper className={classes.bottomBar} elevation={24}>
+                        <Toolbar className={classes.bottomToolbar}>
+                            <Button size="small">
+                                <Build/>
+                                Setup
+                            </Button>
+                            <Button size="small" onClick={() => (this.restart())}>
+                                Skip
+                                <SkipNext/>
+                            </Button>
+                        </Toolbar>
+                    </Paper>
+                )}
                 <DrawCreditDialog
                     currentImage={currentImage}
                     open={this.state.creditDialogOpen}
                     onClose={this.handleCreditDialogClose}
                 />
-
             </Fragment>
         )
     }
