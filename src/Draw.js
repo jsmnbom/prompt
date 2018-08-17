@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import {sample} from "lodash/collection";
 import {Pause, PlayArrow, Copyright, SkipNext, Build} from "@material-ui/icons";
 import DrawCreditDialog from "./CreditDialog";
+import Palette from "./Palette";
 
 const styles = theme => ({
     timeBar: {
@@ -49,6 +50,18 @@ const styles = theme => ({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    palettePaper: {
+        display: 'flex',
+        height: theme.spacing.unit * 6,
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
+        [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
+            width: 600,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        }
     }
 });
 
@@ -64,7 +77,7 @@ class Draw extends PureComponent {
             timePercentLeft: 100,
             motifCategories: setup.motifCategories,
             maxQuality: setup.maxQuality,
-            currentImage: null,
+            showPalette: setup.showPalette,
             currentImageHeight: 1,
             currentImageWidth: 1,
             renderLoader: false,
@@ -85,16 +98,23 @@ class Draw extends PureComponent {
             const renderBottomBar = (window.innerWidth < theme.breakpoints.values.sm) && !landscape;
 
             let appBarHeight = 56;
-            if (window.innerWidth > theme.breakpoints.values.sm && landscape) appBarHeight = 48;
-            if (window.innerWidth > theme.breakpoints.values.md) appBarHeight = 64;
+            if (window.innerWidth > theme.breakpoints.values.xs && landscape) appBarHeight = 48;
+            if (window.innerWidth > theme.breakpoints.values.sm) appBarHeight = 64;
 
             const timerHeight = theme.spacing.unit;
-            const topPadding = theme.spacing.unit * 2;
+            const topMargin = theme.spacing.unit * 2;
+            const bottomMargin = theme.spacing.unit * 2;
             const bottomBar = renderBottomBar ? appBarHeight : 0;
 
-            const otherHeight = appBarHeight + timerHeight + topPadding + bottomBar;
+            let otherHeight = appBarHeight + timerHeight + topMargin + bottomMargin + bottomBar;
 
-            let imgHeight = (window.innerHeight - otherHeight) * 0.75; // Dedicate 3/4 to image
+            if (this.state.showPalette) {
+                const paletteHeight = theme.spacing.unit * 6;
+                const paletteMargin = theme.spacing.unit * 2;
+                otherHeight += paletteHeight + paletteMargin;
+            }
+
+            let imgHeight = (window.innerHeight - otherHeight);
             let imgWidth = (currentImageWidth / currentImageHeight) * imgHeight;
             if (imgWidth + theme.spacing.unit * 4 >= window.innerWidth) {
                 imgWidth = window.innerWidth - theme.spacing.unit * 4;
@@ -222,18 +242,22 @@ class Draw extends PureComponent {
 
     handleLoad = (img) => {
         clearTimeout(this.loadingTimer);
+
+        const palette = this.state.showPalette ? sample(palettes.palettes) : null;
+
         this.updateDimensions({
             startTime: moment(),
             loading: false,
             currentImageWidth: img.target.naturalWidth,
             currentImageHeight: img.target.naturalHeight,
-            renderLoader: false
+            renderLoader: false,
+            currentPalette: palette
         });
     };
 
     render() {
         const {classes} = this.props;
-        const {currentImage, currentUrl, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar} = this.state;
+        const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar} = this.state;
 
         const imgStyle = {
             width: renderImageWidth,
@@ -244,6 +268,11 @@ class Draw extends PureComponent {
             <Fragment>
                 <LinearProgress color="secondary" variant="determinate" className={classes.timeBar}
                                 value={this.state.timePercentLeft} classes={{bar: classes.timeInnerBar}}/>
+                {currentPalette && (
+                    <Paper className={classNames(classes.paper, classes.palettePaper)}>
+                        <Palette palette={currentPalette}/>
+                    </Paper>
+                )}
                 <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (
                         <Fragment>
@@ -256,6 +285,7 @@ class Draw extends PureComponent {
                         <CircularProgress className={classes.loader}/>
                     )}
                 </Paper>
+
                 {renderBottomBar && (
                     <Paper className={classes.bottomBar} elevation={24}>
                         <Toolbar className={classes.bottomToolbar}>
