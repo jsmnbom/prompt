@@ -1,15 +1,25 @@
-import React, {Fragment, PureComponent} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {LinearProgress, Paper, CircularProgress, IconButton, Tooltip, Toolbar, Button} from '@material-ui/core';
+import React, {Fragment, Component} from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Paper from "@material-ui/core/Paper";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
 import {Link, withRouter} from "react-router-dom";
 import {compose} from "recompose";
 import {parse, stringify} from "qs";
-import moment from "moment";
+import dayjs from "dayjs";
 import {categoryFromName} from "./data/motifs";
 import palettes from "./data/palettes";
 import classNames from 'classnames';
-import {sample} from "lodash/collection";
-import {Pause, PlayArrow, Copyright, SkipNext, Build} from "@material-ui/icons";
+import sample from "lodash/sample";
+import Pause from "@material-ui/icons/Pause";
+import PlayArrow from "@material-ui/icons/PlayArrow";
+import Copyright from "@material-ui/icons/Copyright";
+import SkipNext from "@material-ui/icons/SkipNext";
+import Build from "@material-ui/icons/Build";
 import DrawCreditDialog from "./CreditDialog";
 import Palette from "./Palette";
 
@@ -65,7 +75,7 @@ const styles = theme => ({
     }
 });
 
-class Draw extends PureComponent {
+class Draw extends Component {
     mainTimer = null;
     loadingTimer = null;
 
@@ -134,11 +144,11 @@ class Draw extends PureComponent {
     togglePause = () => {
         this.setState((prevState) => {
             if (prevState.pausedAt === null) {
-                return {pausedAt: (moment().diff(prevState.startTime))};
+                return {pausedAt: (dayjs().diff(prevState.startTime, 'millisecond'))};
             } else {
                 return {
                     pausedAt: null,
-                    startTime: prevState.startTime.add(moment().diff(this.state.startTime) - this.state.pausedAt)
+                    startTime: prevState.startTime.add(dayjs().diff(this.state.startTime, 'millisecond') - this.state.pausedAt, 'millisecond')
                 }
             }
         }, () => {
@@ -206,7 +216,7 @@ class Draw extends PureComponent {
 
     progress = () => {
         if (!this.state.startTime || this.state.loading) return;
-        const milliSecPassed = this.state.pausedAt || moment().diff(this.state.startTime);
+        const milliSecPassed = this.state.pausedAt || dayjs().diff(this.state.startTime, 'millisecond');
         const timePercentLeft = 100 - (((milliSecPassed / 1000) / this.state.timePer) * 100);
 
         if (timePercentLeft <= 0) {
@@ -257,7 +267,7 @@ class Draw extends PureComponent {
         const palette = this.state.showPalette ? sample(palettes.palettes) : null;
 
         this.updateDimensions({
-            startTime: moment(),
+            startTime: dayjs(),
             loading: false,
             currentImageWidth: img.target.naturalWidth,
             currentImageHeight: img.target.naturalHeight,

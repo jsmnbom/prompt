@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import {Card, ButtonBase, Typography, Switch, } from "@material-ui/core";
-import {withStyles} from '@material-ui/core/styles';
+import Card from "@material-ui/core/Card";
+import ButtonBase from "@material-ui/core/ButtonBase";
+import Typography from "@material-ui/core/Typography";
+import Switch from "@material-ui/core/Switch";
+import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
 
 

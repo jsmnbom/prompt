@@ -1,25 +1,23 @@
 import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {
-    Typography,
-    FormControlLabel,
-    RadioGroup,
-    Radio,
-    FormControl,
-    Checkbox,
-    Select,
-    MenuItem,
-    Input,
-    Chip,
-    InputLabel,
-    ExpansionPanel,
-    ExpansionPanelSummary,
-    ExpansionPanelDetails,
-    FormLabel,
-    FormHelperText,
-    Toolbar
-} from "@material-ui/core";
-import {ExpandMore} from "@material-ui/icons";
+import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from "@material-ui/core/Typography";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
+import FormControl from "@material-ui/core/FormControl";
+import Checkbox from "@material-ui/core/Checkbox";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Input from "@material-ui/core/Input";
+import Chip from "@material-ui/core/Chip";
+import InputLabel from "@material-ui/core/InputLabel";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Toolbar from "@material-ui/core/Toolbar";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 
 const styles = theme => ({
     layout: {

@@ -1,7 +1,11 @@
 import React, {Component, Fragment} from 'react';
-import {Dialog, DialogTitle, IconButton, DialogContent, Typography} from '@material-ui/core';
-import {Close} from '@material-ui/icons';
-import {withStyles} from '@material-ui/core/styles';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import DialogContent from "@material-ui/core/DialogContent";
+import Typography from "@material-ui/core/Typography";
+import Close from "@material-ui/icons/Close";
+import withStyles from '@material-ui/core/styles/withStyles';
 import {compose} from "recompose";
 import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
 import BY from './img/by.svg'

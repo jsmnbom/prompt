@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
-import {
-    Stepper,
-    Step,
-    StepLabel,
-    Button,
-    Paper,
-    Toolbar,
-    MobileStepper,
-    Tooltip, IconButton
-} from '@material-ui/core';
-import {Copyright, KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
-import {withStyles} from '@material-ui/core/styles';
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Toolbar from "@material-ui/core/Toolbar";
+import MobileStepper from "@material-ui/core/MobileStepper";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import Copyright from "@material-ui/icons/Copyright";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import withStyles from '@material-ui/core/styles/withStyles';
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import {compose} from 'recompose';
 import {Link, withRouter} from "react-router-dom";
