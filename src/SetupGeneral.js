@@ -161,7 +161,7 @@ class SetupGeneral extends Component {
                                     value="showPalette"
                                 />
                             }
-                            label="Show colour palette"
+                            label="Show a random colour palette from colourlovers.com"
                         />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
