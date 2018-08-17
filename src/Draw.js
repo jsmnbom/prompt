@@ -296,7 +296,9 @@ class Draw extends PureComponent {
                             <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
                                  onError={this.handleError}
                                  className={classNames({[classes.dimmed]: renderLoader})}
-                                 alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com`}/>
+                                 alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
+                                 title={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
+                            />
                         </Fragment>
                     )}
                     {renderLoader && (

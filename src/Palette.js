@@ -29,7 +29,6 @@ class Palette extends Component {
                     if (palette.colorWidths) {
                         style.flexBasis = `${palette.colorWidths[i] * 100}%`
                     }
-                    console.log(i);
                     return (
                         <Fragment key={i}>
                             <Tooltip title={`#${color}`} classes={{tooltip: classes.tooltip}}>

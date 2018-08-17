@@ -58,7 +58,7 @@ getImages({
     extras: 'license, owner_name, icon_server, views, url_z, url_b, url_h',
     sort: 'interestingness-desc'
 }, 100, (images) => {
-    fs.writeFile(`../src/motifs/${name.toLowerCase()}.json`, JSON.stringify({
+    fs.writeFile(`../src/data/motifs/${name.toLowerCase()}.json`, JSON.stringify({
         images: images,
         name: name,
         thumb: 0
