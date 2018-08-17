@@ -9,7 +9,7 @@ import {categoryFromName} from "./motifs";
 import classNames from 'classnames';
 import {sample} from "lodash/collection";
 import {Pause, PlayArrow, Copyright, SkipNext, Build} from "@material-ui/icons";
-import DrawCreditDialog from "./DrawCreditDialog";
+import DrawCreditDialog from "./CreditDialog";
 
 const styles = theme => ({
     timeBar: {

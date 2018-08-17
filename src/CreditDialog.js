@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Dialog, DialogTitle, IconButton, DialogContent, Typography} from '@material-ui/core';
 import {Close} from '@material-ui/icons';
 import {withStyles} from '@material-ui/core/styles';
@@ -10,6 +10,7 @@ import NC from './img/nc.svg'
 import ND from './img/nd.svg'
 import SA from './img/sa.svg'
 import ZERO from './img/zero.svg'
+import categories from "./motifs";
 
 const styles = theme => ({
     CCIcon: {
@@ -76,15 +77,23 @@ const LICENSES = {
     },
 };
 
-class DrawCreditDialog extends Component {
+class CreditDialog extends Component {
     handleClose = () => {
         this.props.onClose();
     };
 
     render() {
         const {classes, currentImage, width, ...other} = this.props;
+        let images = [];
 
-        const license = LICENSES[currentImage.license];
+        if (currentImage) {
+            images = [{
+                name: 'Image',
+                image: currentImage
+            }];
+        } else {
+            images = categories.map(({name, images, thumb}) => ({name: `${name} thumbnail`, image: images[thumb]}));
+        }
 
         return (
             <Dialog onClose={this.handleClose}
@@ -101,26 +110,30 @@ class DrawCreditDialog extends Component {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    <Typography variant="display1">
-                        Image
-                    </Typography>
-                    <Typography>
-                        <a href={`https://flickr.com/${currentImage.owner}/${currentImage.id}`}
-                           target="_blank">{currentImage.title}</a>
-                        {' '}
-                        by
-                        {' '}
-                        <a href={`https://flickr.com/${currentImage.owner}`}
-                           target="_blank">{currentImage.ownername}</a>
-                        {' '}
-                        is licensed according to
-                        {' '}
-                        <a href={license.url}
-                           target="_blank">{license.name}</a>
-                        .
-                    </Typography>
-                    {license.icons.map((icon) => (
-                        <img key={icon} src={ICONS[icon]} className={classes.CCIcon} alt={icon}/>
+                    {images.map(({name, image}) => (
+                        <Fragment key={name}>
+                            <Typography variant="display1">
+                                {name}
+                            </Typography>
+                            <Typography>
+                                <a href={`https://flickr.com/${image.owner}/${image.id}`}
+                                   target="_blank">{image.title}</a>
+                                {' '}
+                                by
+                                {' '}
+                                <a href={`https://flickr.com/${image.owner}`}
+                                   target="_blank">{image.ownername}</a>
+                                {' '}
+                                is licensed according to
+                                {' '}
+                                <a href={LICENSES[image.license].url}
+                                   target="_blank">{LICENSES[image.license].name}</a>
+                                .
+                            </Typography>
+                            {LICENSES[image.license].icons.map((icon) => (
+                                <img key={icon} src={ICONS[icon]} className={classes.CCIcon} alt={icon}/>
+                            ))}
+                        </Fragment>
                     ))}
                 </DialogContent>
             </Dialog>
@@ -131,4 +144,4 @@ class DrawCreditDialog extends Component {
 export default compose(
     withStyles(styles),
     withWidth()
-)(DrawCreditDialog);
+)(CreditDialog);

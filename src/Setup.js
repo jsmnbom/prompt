@@ -7,9 +7,9 @@ import {
     Paper,
     Toolbar,
     MobileStepper,
-    Tooltip
+    Tooltip, IconButton
 } from '@material-ui/core';
-import {KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
+import {Copyright, KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
 import {withStyles} from '@material-ui/core/styles';
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import {compose} from 'recompose';
@@ -17,6 +17,7 @@ import {Link} from "react-router-dom";
 import SetupMotifs from "./SetupMotifs";
 import SetupGeneral from "./SetupGeneral";
 import {stringify} from "qs";
+import DrawCreditDialog from "./CreditDialog";
 
 const styles = theme => ({
     desktopStepper: {
@@ -68,15 +69,38 @@ class Setup extends Component {
             maxQuality: 'z'
         },
         valid: false,
-        errMsg: ''
+        errMsg: '',
+        creditDialogOpen: false
     };
 
     componentWillMount() {
         this.setToolbarButtons();
     }
 
+    openCreditDialog = () => {
+        this.setState({
+            creditDialogOpen: true
+        })
+    };
+
+    handleCreditDialogClose = () => {
+        this.setState({
+            creditDialogOpen: false
+        })
+    };
+
     setToolbarButtons() {
-        this.props.setExtraToolbarItems();
+        if (this.state.activeStep === 1) {
+            this.props.setExtraToolbarItems(
+                <Tooltip title="Show thumbnail credit">
+                    <IconButton onClick={this.openCreditDialog}>
+                        <Copyright/>
+                    </IconButton>
+                </Tooltip>
+            );
+        } else {
+            this.props.setExtraToolbarItems();
+        }
     }
 
     updateData = (data, valid, errMsg) => {
@@ -106,6 +130,8 @@ class Setup extends Component {
         this.setState({
             activeStep: activeStep + 1,
             valid: false
+        }, () => {
+            this.setToolbarButtons();
         });
     };
 
@@ -114,6 +140,8 @@ class Setup extends Component {
         this.setState({
             activeStep: activeStep - 1,
             valid: false
+        }, () => {
+            this.setToolbarButtons();
         });
     };
 
@@ -199,6 +227,10 @@ class Setup extends Component {
                         {stepperWithButtons}
                     </Toolbar>
                 </Paper>
+                <DrawCreditDialog
+                    open={this.state.creditDialogOpen}
+                    onClose={this.handleCreditDialogClose}
+                />
             </main>
         );
     }
