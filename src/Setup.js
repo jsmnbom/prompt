@@ -149,6 +149,7 @@ class Setup extends Component {
 
     handleNext = () => {
         const {activeStep} = this.state;
+        if (activeStep + 1 >= steps.length) this.props.preloadDraw();
         this.setState({
             activeStep: activeStep + 1,
             valid: false

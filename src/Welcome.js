@@ -48,7 +48,7 @@ class Welcome extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, preloadSetup} = this.props;
         return (
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
@@ -68,8 +68,12 @@ class Welcome extends Component {
                     </Typography>
                     <Grid container justify="center">
                         <Grid item>
-                            <Button component={Link} to="/setup" variant="contained" color="primary"
-                                    className={classes.button}>
+                            <Button component={Link}
+                                    to="/setup"
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    onMouseOver={preloadSetup()}>
                                 Lets get started
                             </Button>
                         </Grid>

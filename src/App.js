@@ -14,21 +14,8 @@ import {Switch, Route} from "react-router-dom";
 import Welcome from "./Welcome";
 import {compose} from "recompose";
 import Loadable from 'react-loadable';
+import Loading from "./Loading";
 
-/**
- * @return {null}
- */
-function Loading(props) {
-    if (props.error) {
-        return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
-    } else if (props.timedOut) {
-        return <div>Taking a long time... <button onClick={ props.retry }>Retry</button></div>;
-    } else if (props.pastDelay) {
-        return <div>Loading...</div>;
-    } else {
-        return null;
-    }
-}
 
 const Setup = Loadable({
     loader: () => import('./Setup'),
@@ -142,8 +129,8 @@ class App extends Component {
                     </Toolbar>
                 </AppBar>
                 <Switch>
-                    <Route exact path="/" render={() => <Welcome {...setItems}/>}/>
-                    <Route path="/setup" render={() => <Setup {...setItems}/>}/>
+                    <Route exact path="/" render={() => <Welcome {...setItems} preloadSetup={Setup.preload}/>}/>
+                    <Route path="/setup" render={() => <Setup {...setItems} preloadDraw={Draw.preload}/>}/>
                     <Route path="/draw" render={() => <Draw {...setItems}/>}/>
                 </Switch>
             </Fragment>
