@@ -97,7 +97,7 @@ class Draw extends Component {
             setup: setup,
             timePer: setup.timePer === 'inf' ? null : parseInt(setup.timePer, 10),
             showPalette: (setup.showPalette === 'true'),
-            showWords: (setup.wordCount > 0 && setup.wordCategories.length > 0),
+            showWords: (setup.wordCount > 0 && setup.wordCategories && setup.wordCategories.length > 0),
             timePercentLeft: 100,
             currentImageHeight: 1,
             currentImageWidth: 1,
