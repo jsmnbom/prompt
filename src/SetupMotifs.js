@@ -4,17 +4,26 @@ import SetupMotifCategory from "./SetupMotifCategory";
 import categories from './data/motifs'
 
 const styles = theme => ({
-    container: {
-        display: 'flex',
-        boxSizing: 'border-box',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        flexWrap: 'wrap',
-
+    root: {
         paddingTop: theme.spacing.unit * 3,
-        paddingLeft: theme.spacing.unit * 4,
-        paddingRight: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing.unit * 3,
+        paddingRight: theme.spacing.unit * 3,
         paddingBottom: theme.spacing.unit * 10
+    },
+    gridList: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        [theme.breakpoints.up('sm')]: {
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        },
+        [theme.breakpoints.up('md')]: {
+            gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
+        },
+        [theme.breakpoints.up(1150)]: {
+            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+        },
+        gridGap: `${theme.spacing.unit}px`,
+        gap: `${theme.spacing.unit}px`
     },
     item: {
         marginLeft: theme.spacing.unit,
@@ -77,22 +86,19 @@ class SetupMotifs extends Component {
         const {motifCategories} = data;
 
         return (
-            <div className={classes.container}>
+            <div className={classes.root}>
+                <div className={classes.gridList}>
                 {categories.map(({name, images, thumb}) => {
                     return (
-                        <div className={classes.item} key={name}>
                             <SetupMotifCategory
+                                key={name}
                                 name={name}
                                 image={images[thumb].url_z}
                                 toggle={this.toggle(name)}
                                 checked={motifCategories.indexOf(name) !== -1}/>
-                        </div>
                     )
                 })}
-                {/*To style last row properly*/}
-                <div className={`${classes.item} ${classes.fakeItem}`}/>
-                <div className={`${classes.item} ${classes.fakeItem}`}/>
-                <div className={`${classes.item} ${classes.fakeItem}`}/>
+                </div>
             </div>
         )
     }
