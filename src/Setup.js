@@ -19,6 +19,7 @@ import SetupMotifs from "./SetupMotifs";
 import SetupGeneral from "./SetupGeneral";
 import {parse, stringify} from "qs";
 import DrawCreditDialog from "./CreditDialog";
+import categories from './data/motifs'
 
 const styles = theme => ({
     desktopStepper: {
@@ -94,6 +95,12 @@ class Setup extends Component {
 
     componentWillMount() {
         this.setToolbarButtons();
+        const preload = categories.map((cat) => {
+            let img = new Image();
+            img.src = cat.images[cat.thumb].url_z;
+            return img;
+        });
+        console.log(preload);
     }
 
     openCreditDialog = () => {
