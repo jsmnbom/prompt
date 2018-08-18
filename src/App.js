@@ -12,9 +12,33 @@ import MoreVert from "@material-ui/icons/MoreVert";
 import Launch from "@material-ui/icons/Launch";
 import {Switch, Route} from "react-router-dom";
 import Welcome from "./Welcome";
-import Setup from "./Setup";
-import Draw from "./Draw";
 import {compose} from "recompose";
+import Loadable from 'react-loadable';
+
+/**
+ * @return {null}
+ */
+function Loading(props) {
+    if (props.error) {
+        return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
+    } else if (props.timedOut) {
+        return <div>Taking a long time... <button onClick={ props.retry }>Retry</button></div>;
+    } else if (props.pastDelay) {
+        return <div>Loading...</div>;
+    } else {
+        return null;
+    }
+}
+
+const Setup = Loadable({
+    loader: () => import('./Setup'),
+    loading: Loading,
+});
+
+const Draw = Loadable({
+    loader: () => import('./Draw'),
+    loading: Loading,
+});
 
 const styles = theme => ({
     appBar: {
