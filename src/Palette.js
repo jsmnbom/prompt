@@ -9,7 +9,8 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     color: {
-        flexGrow: 1
+        flexGrow: 1,
+        transition: 'background-color .5s ease-out, flex-basis .5s ease-out'
     },
     tooltip: {
         fontSize: '150%'

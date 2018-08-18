@@ -12,6 +12,12 @@ const styles = theme => ({
         height: 0,
         paddingTop: '56.25%', // 16:9
         width: '100%',
+        animation: 'fadein .8s ease-out .2s forwards',
+        opacity: 0
+    },
+    '@keyframes fadein': {
+        from: {opacity: '0'},
+        to: {opacity: '1'}
     },
     img: {
         backgroundSize: 'cover',
