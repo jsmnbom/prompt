@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import sampleSize from "lodash/sampleSize";
 
 const styles = theme => ({
     container: {
@@ -13,7 +14,17 @@ const styles = theme => ({
     word: {
         flexGrow: 1,
         textAlign: 'center',
-        minWidth: 100
+        fontWeight: 400,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        width: '50%',
+        [theme.breakpoints.up(400)]: {
+            width: '30%'
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: '20%'
+        },
     },
     tooltip: {
         fontSize: '150%'
@@ -21,8 +32,14 @@ const styles = theme => ({
 });
 
 class Words extends Component {
+    componentWillMount() {
+        this.setState({
+            backgrounds: sampleSize(['f0', 'e6', 'dc', 'd2', 'c8'], this.props.words.length).map((x) => `#${x}${x}${x}`)
+        })
+    }
+
     render() {
-        const {classes, words, wordsRef} = this.props;
+        const {classes, words} = this.props;
 
         return (
             <div className={classes.container}>
@@ -30,7 +47,8 @@ class Words extends Component {
                     return (
                         <Fragment key={i}>
                             <Tooltip title={word} classes={{tooltip: classes.tooltip}}>
-                                <Typography variant="title" className={classes.word}>
+                                <Typography variant="title" className={classes.word}
+                                            style={{backgroundColor: this.state.backgrounds[i]}}>
                                     {word}
                                 </Typography>
                             </Tooltip>

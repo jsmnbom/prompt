@@ -40,7 +40,8 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 2,
         marginLeft: 'auto',
         marginRight: 'auto',
-        position: 'relative'
+        position: 'relative',
+        borderRadius: 0
     },
     loader: {
         display: 'block',
