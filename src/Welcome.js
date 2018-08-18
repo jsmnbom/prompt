@@ -73,7 +73,7 @@ class Welcome extends Component {
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
-                                    onMouseOver={preloadSetup()}>
+                                    onMouseOver={() => preloadSetup()}>
                                 Lets get started
                             </Button>
                         </Grid>
