@@ -54,9 +54,6 @@ const styles = theme => ({
     dimmed: {
         filter: 'brightness(50%)'
     },
-    imgTransition: {
-        transition: 'width .5s ease-out, height .5s ease-out'
-    },
     bottomBar: {
         width: '100%',
         position: 'fixed',
@@ -350,12 +347,12 @@ class Draw extends Component {
                     </Paper>
                 )}
 
-                <Paper className={classNames(classes.paper, classes.imgTransition)} style={imgStyle}>
+                <Paper className={classes.paper} style={imgStyle}>
                     {currentUrl && (
                         <Fragment>
                             <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
                                  onError={this.handleError}
-                                 className={classNames(classes.imgTransition, {[classes.dimmed]: renderLoader})}
+                                 className={classNames({[classes.dimmed]: renderLoader})}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
                                  title={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
                             />
