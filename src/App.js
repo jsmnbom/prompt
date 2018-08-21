@@ -10,11 +10,13 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVert from "@material-ui/icons/MoreVert";
 import Launch from "@material-ui/icons/Launch";
-import {Switch, Route} from "react-router-dom";
+import Switch from "react-router-dom/es/Switch";
+import Route from "react-router-dom/es/Route";
 import Welcome from "./Welcome";
 import {compose} from "recompose";
 import Loadable from 'react-loadable';
 import Loading from "./Loading";
+import Link from "react-router-dom/es/Link";
 
 
 const Setup = Loadable({
@@ -24,6 +26,11 @@ const Setup = Loadable({
 
 const Draw = Loadable({
     loader: () => import('./Draw'),
+    loading: Loading,
+});
+
+const Debug = Loadable({
+    loader: () => import('./Debug'),
     loading: Loading,
 });
 
@@ -124,6 +131,9 @@ class App extends Component {
                             <MenuItem onClick={this.handleMenuClose(() => {
                                 window.open('https://github.com/jsmnbom/prompt')
                             })}>Show source code on Github&nbsp;<Launch style={{fontSize: 18}}/></MenuItem>
+                            {process.env.NODE_ENV === "development" && (
+                                <MenuItem component={Link} to={"/debug"}>Debugging menu</MenuItem>
+                            )}
                             {/*<MenuItem onClick={this.handleMenuClose(null)}>About</MenuItem>*/}
                         </Menu>
                     </Toolbar>
@@ -132,6 +142,7 @@ class App extends Component {
                     <Route exact path="/" render={() => <Welcome {...setItems} preloadSetup={Setup.preload}/>}/>
                     <Route path="/setup" render={() => <Setup {...setItems} preloadDraw={Draw.preload}/>}/>
                     <Route path="/draw" render={() => <Draw {...setItems}/>}/>
+                    <Route path="/debug" render={() => <Debug {...setItems}/>}/>
                 </Switch>
             </Fragment>
         )
