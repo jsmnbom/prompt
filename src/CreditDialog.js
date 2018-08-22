@@ -1,20 +1,20 @@
-import React, {Component, Fragment} from 'react';
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
-import DialogContent from "@material-ui/core/DialogContent";
-import Typography from "@material-ui/core/Typography";
-import Close from "@material-ui/icons/Close";
 import withStyles from '@material-ui/core/styles/withStyles';
-import {compose} from "recompose";
+import Typography from "@material-ui/core/Typography";
 import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
+import Close from "@material-ui/icons/Close";
+import React, {Component, Fragment} from 'react';
+import {compose} from "recompose";
+import categories from "./data/motifs";
 import BY from './img/by.svg'
 import CC from './img/cc.svg'
 import NC from './img/nc.svg'
 import ND from './img/nd.svg'
 import SA from './img/sa.svg'
 import ZERO from './img/zero.svg'
-import categories from "./data/motifs";
 
 const styles = theme => ({
     CCIcon: {

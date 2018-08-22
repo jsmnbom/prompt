@@ -1,29 +1,29 @@
-import React, {Fragment, Component} from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Paper from "@material-ui/core/Paper";
+import withStyles from '@material-ui/core/styles/withStyles';
 import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import {Link, withRouter} from "react-router-dom";
-import {compose} from "recompose";
-import {parse, stringify} from "qs";
-import dayjs from "dayjs";
-import {categoryFromName} from "./data/motifs";
-import palettes from "./data/palettes";
-import classNames from 'classnames';
-import sample from "lodash/sample";
+import Tooltip from "@material-ui/core/Tooltip";
+import Build from "@material-ui/icons/Build";
+import Copyright from "@material-ui/icons/Copyright";
 import Pause from "@material-ui/icons/Pause";
 import PlayArrow from "@material-ui/icons/PlayArrow";
-import Copyright from "@material-ui/icons/Copyright";
 import SkipNext from "@material-ui/icons/SkipNext";
-import Build from "@material-ui/icons/Build";
-import DrawCreditDialog from "./CreditDialog";
-import Palette from "./Palette";
+import classNames from 'classnames';
+import dayjs from "dayjs";
+import sample from "lodash/sample";
 import sampleSize from "lodash/sampleSize";
+import {parse, stringify} from "qs";
+import React, {Component, Fragment} from 'react';
+import {Link, withRouter} from "react-router-dom";
+import {compose} from "recompose";
+import DrawCreditDialog from "./CreditDialog";
+import {categoryFromName} from "./data/motifs";
+import palettes from "./data/palettes";
 import WORDS from './data/words'
+import Palette from "./Palette";
 import Words from "./Words";
 
 const makeRepeated = (arr, repeats) =>

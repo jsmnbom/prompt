@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
 import ButtonBase from "@material-ui/core/ButtonBase";
-import Typography from "@material-ui/core/Typography";
-import {grey} from '@material-ui/core/colors';
 import Checkbox from '@material-ui/core/Checkbox';
+import {grey} from '@material-ui/core/colors';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from "@material-ui/core/Typography";
 import classNames from 'classnames';
+import React, {Component} from 'react';
 
 
 const styles = theme => ({

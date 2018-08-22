@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
 import sampleSize from "lodash/sampleSize";
+import React, {Component, Fragment} from 'react';
 
 const styles = theme => ({
     container: {

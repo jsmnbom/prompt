@@ -1,22 +1,22 @@
-import React, {Component, Fragment} from 'react';
-import logo from './img/logo.svg';
-import withRoot from "./withRoot";
-import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import MoreVert from "@material-ui/icons/MoreVert";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import Launch from "@material-ui/icons/Launch";
-import Switch from "react-router-dom/es/Switch";
-import Route from "react-router-dom/es/Route";
-import Welcome from "./Welcome";
-import {compose} from "recompose";
+import MoreVert from "@material-ui/icons/MoreVert";
+import React, {Component, Fragment} from 'react';
 import Loadable from 'react-loadable';
-import Loading from "./Loading";
 import Link from "react-router-dom/es/Link";
+import Route from "react-router-dom/es/Route";
+import Switch from "react-router-dom/es/Switch";
+import {compose} from "recompose";
+import logo from './img/logo.svg';
+import Loading from "./Loading";
+import Welcome from "./Welcome";
+import withRoot from "./withRoot";
 
 
 const Setup = Loadable({

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import SetupMotifCategory from "./SetupMotifCategory";
+import React, {Component} from 'react';
 import categories from './data/motifs'
+import SetupMotifCategory from "./SetupMotifCategory";
 
 const styles = theme => ({
     root: {

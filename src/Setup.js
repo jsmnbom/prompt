@@ -1,25 +1,25 @@
-import React, {Component} from 'react';
-import Stepper from "@material-ui/core/Stepper";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MobileStepper from "@material-ui/core/MobileStepper";
+import Paper from "@material-ui/core/Paper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import withStyles from '@material-ui/core/styles/withStyles';
 import Toolbar from "@material-ui/core/Toolbar";
-import MobileStepper from "@material-ui/core/MobileStepper";
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import Copyright from "@material-ui/icons/Copyright";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import withStyles from '@material-ui/core/styles/withStyles';
-import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
-import {compose} from 'recompose';
-import {Link, withRouter} from "react-router-dom";
-import SetupMotifs from "./SetupMotifs";
-import SetupGeneral from "./SetupGeneral";
 import {parse, stringify} from "qs";
+import React, {Component} from 'react';
+import {Link, withRouter} from "react-router-dom";
+import {compose} from 'recompose';
 import DrawCreditDialog from "./CreditDialog";
 import categories from './data/motifs'
+import SetupGeneral from "./SetupGeneral";
+import SetupMotifs from "./SetupMotifs";
 
 const styles = theme => ({
     desktopStepper: {

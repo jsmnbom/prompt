@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Tooltip from '@material-ui/core/Tooltip';
+import React, {Component, Fragment} from 'react';
 
 const styles = theme => ({
     container: {
