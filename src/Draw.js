@@ -87,6 +87,28 @@ const styles = theme => ({
     }
 });
 
+class RingBuffer {
+    constructor(length) {
+        this.length = length;
+        this.pointer = 0;
+        this.buffer = [];
+    }
+
+    get() {
+        return this.buffer[this.pointer - 1]
+    }
+
+    push(item){
+        this.buffer[this.pointer] = item;
+        this.pointer = (this.pointer + 1) % this.length;
+        return item;
+    }
+
+    includes(item) {
+        return this.buffer.includes(item);
+    }
+}
+
 class Draw extends Component {
     mainTimer = null;
     loadingTimer = null;
@@ -104,8 +126,9 @@ class Draw extends Component {
             currentImageWidth: 1,
             renderLoader: false,
             pausedAt: null, //secs since start at pause time,
-            creditDialogOpen: false
+            creditDialogOpen: false,
         };
+        this.lastImages = new RingBuffer(20);
         this.wordsRef = React.createRef();
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -263,7 +286,14 @@ class Draw extends Component {
 
     restart = () => {
         if (this.state.loading) return;
-        const image = sample(categoryFromName(sample(this.state.setup.motifCategories)).images);
+
+        const cat = categoryFromName(sample(this.state.setup.motifCategories));
+        let image = sample(cat.images);
+        while (this.lastImages.includes(image.id)) {
+            image = sample(cat.images);
+        }
+        this.lastImages.push(image.id);
+
         let allowed = ['url_h', 'url_b', 'url_z'].slice('hbz'.indexOf(this.state.setup.maxQuality));
         let url;
         for (let v of allowed) {
@@ -271,6 +301,7 @@ class Draw extends Component {
             if (url) break;
         }
         url = image.urlBase + url;
+
         this.setState({
             currentImage: image,
             currentUrl: url,
