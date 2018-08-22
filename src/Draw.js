@@ -147,7 +147,7 @@ class Draw extends Component {
             pausedAt: null, //secs since start at pause time,
             creditDialogOpen: false,
         };
-        this.lastImages = new RingBuffer(20);
+        this.lastImages = new RingBuffer(50);
         this.wordsRef = React.createRef();
         this.updateDimensions = this.updateDimensions.bind(this);
     }
