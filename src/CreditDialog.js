@@ -100,7 +100,7 @@ class CreditDialog extends Component {
                 image: currentImage
             }];
         } else {
-            images = categories.map(({name, images, thumb}) => ({name: `${name} thumbnail`, image: images[thumb]}));
+            images = categories.map(({name, images, thumb}) => ({name: `${name} thumbnail`, image: thumb}));
         }
 
         return (

@@ -97,7 +97,7 @@ class Setup extends Component {
         this.setToolbarButtons();
         const preload = categories.map((cat) => {
             let img = new Image();
-            img.src = cat.images[cat.thumb].url_z;
+            img.src = cat.thumb.urlBase + cat.thumb.url_z;
             return img;
         });
         console.log(preload);

@@ -270,6 +270,7 @@ class Draw extends Component {
             url = image[v];
             if (url) break;
         }
+        url = image.urlBase + url;
         this.setState({
             currentImage: image,
             currentUrl: url,
