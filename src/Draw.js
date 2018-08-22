@@ -51,7 +51,25 @@ const styles = theme => ({
         marginLeft: -theme.spacing.unit * 2.5,
         marginTop: -theme.spacing.unit * 2.5
     },
-    dimmed: {
+    imgFilterSepia: {
+        filter: 'sepia(100%)'
+    },
+    imgFilterGrayscale: {
+        filter: 'grayscale(100%)'
+    },
+    imgFilterInvert: {
+        filter: 'invert(100%)'
+    },
+    imgFilterSepiaDimmed: {
+        filter: 'sepia(100%) brightness(50%)'
+    },
+    imgFilterGrayscaleDimmed: {
+        filter: 'grayscale(100%) brightness(50%)'
+    },
+    imgFilterInvertDimmed: {
+        filter: 'invert(100%) brightness(50%)'
+    },
+    imgFilterDimmed: {
         filter: 'brightness(50%)'
     },
     bottomBar: {
@@ -98,7 +116,7 @@ class RingBuffer {
         return this.buffer[this.pointer - 1]
     }
 
-    push(item){
+    push(item) {
         this.buffer[this.pointer] = item;
         this.pointer = (this.pointer + 1) % this.length;
         return item;
@@ -121,6 +139,7 @@ class Draw extends Component {
             timePer: setup.timePer === 'inf' ? null : parseInt(setup.timePer, 10),
             showPalette: (setup.showPalette === 'true'),
             showWords: (setup.wordCount > 0 && setup.wordCategories && setup.wordCategories.length > 0),
+            imgFilter: setup.imgFilter,
             timePercentLeft: 100,
             currentImageHeight: 1,
             currentImageWidth: 1,
@@ -289,7 +308,7 @@ class Draw extends Component {
 
         const cat = categoryFromName(sample(this.state.setup.motifCategories));
         let image = sample(cat.images);
-        while (this.lastImages.includes(image.id)) {
+        while (this.lastImages.includes(image.id) || (this.state.imgFilter !== 'none' && (image.license === 3 || image.license === 6))) {
             image = sample(cat.images);
         }
         this.lastImages.push(image.id);
@@ -351,7 +370,7 @@ class Draw extends Component {
 
     render() {
         const {classes} = this.props;
-        const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar, currentWords, showPalette} = this.state;
+        const {currentImage, currentUrl, currentPalette, renderLoader, renderImageWidth, renderImageHeight, renderBottomBar, currentWords, showPalette, imgFilter} = this.state;
 
         const imgStyle = {
             width: renderImageWidth,
@@ -384,7 +403,15 @@ class Draw extends Component {
                         <Fragment>
                             <img src={currentUrl} onLoad={this.handleLoad} style={imgStyle}
                                  onError={this.handleError}
-                                 className={classNames({[classes.dimmed]: renderLoader})}
+                                 className={classNames({
+                                     [classes.imgFilterSepia]: imgFilter === 'sepia' && !renderLoader,
+                                     [classes.imgFilterGrayscale]: imgFilter === 'grayscale' && !renderLoader,
+                                     [classes.imgFilterInvert]: imgFilter === 'invert' && !renderLoader,
+                                     [classes.imgFilterSepiaDimmed]: imgFilter === 'sepia' && renderLoader,
+                                     [classes.imgFilterGrayscaleDimmed]: imgFilter === 'grayscale' && renderLoader,
+                                     [classes.imgFilterInvertDimmed]: imgFilter === 'invert' && renderLoader,
+                                     [classes.imgFilterDimmed]: imgFilter === 'none' && renderLoader
+                                 })}
                                  alt={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
                                  title={`${currentImage.title} by ${currentImage.ownername} on Flickr.com${process.env.NODE_ENV === 'development' ? ` (${currentImage.id})` : ''}`}
                             />

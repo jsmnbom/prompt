@@ -69,7 +69,8 @@ class Setup extends Component {
             wordCategories: [],
             wordCount: 3,
             motifCategories: [],
-            maxQuality: 'z'
+            maxQuality: 'z',
+            imgFilter: 'none'
         };
         const data = {
             timePer: setup.timePer || defaultData.timePer,
@@ -77,7 +78,8 @@ class Setup extends Component {
             wordCategories: setup.wordCategories || defaultData.wordCategories,
             wordCount: parseInt(setup.wordCount, 10) || defaultData.wordCount,
             motifCategories: setup.motifCategories || defaultData.motifCategories,
-            maxQuality: setup.maxQuality || defaultData.maxQuality
+            maxQuality: setup.maxQuality || defaultData.maxQuality,
+            imgFilter: setup.imgFilter || defaultData.imgFilter
         };
 
         this.state = {

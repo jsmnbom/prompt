@@ -71,7 +71,7 @@ const styles = theme => ({
 
 const TIMES = [
     ['inf', 'Infinite'],
-    [30, '30 sec.'],
+    [30, '30 sec'],
     [60, '1 min'],
     [60 * 2, '2 min'],
     [60 * 3, '3 min'],
@@ -111,7 +111,7 @@ class SetupGeneral extends Component {
 
     render() {
         const {classes, data, wasChanged} = this.props;
-        const {timePer, showPalette, wordCategories, wordCount, maxQuality} = data;
+        const {timePer, showPalette, wordCategories, wordCount, maxQuality, imgFilter} = data;
 
         return (
             <div className={classes.layout}>
@@ -138,6 +138,35 @@ class SetupGeneral extends Component {
                                         className={classes.radio}/>
                                 )
                             })}
+                        </RadioGroup>
+                        <FormLabel component="legend">Apply filter to image</FormLabel>
+                        <RadioGroup
+                            aria-label="Image filter"
+                            name="imgFilter"
+                            className={classes.group}
+                            value={imgFilter}
+                            onChange={this.handleChange('imgFilter')}
+                        >
+                            <FormControlLabel
+                                value={'none'}
+                                control={<Radio/>}
+                                label={'Unfiltered'}
+                                className={classes.radio}/>
+                            <FormControlLabel
+                                value={'grayscale'}
+                                control={<Radio/>}
+                                label={'Grayscale'}
+                                className={classes.radio}/>
+                            <FormControlLabel
+                                value={'sepia'}
+                                control={<Radio/>}
+                                label={'Sepia'}
+                                className={classes.radio}/>
+                            <FormControlLabel
+                                value={'invert'}
+                                control={<Radio/>}
+                                label={'Invert'}
+                                className={classes.radio}/>
                         </RadioGroup>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
