@@ -93,7 +93,7 @@ class SetupMotifs extends Component {
                             <SetupMotifCategory
                                 key={name}
                                 name={name}
-                                image={thumb.urlBase + thumb.url_z}
+                                image={thumb && (thumb.urlBase + thumb.url_z)}
                                 toggle={this.toggle(name)}
                                 checked={motifCategories.indexOf(name) !== -1}/>
                     )
