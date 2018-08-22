@@ -65,7 +65,11 @@ const styles = theme => ({
     },
     panel: {},
     panelDetails: {
-        flexDirection: 'column'
+        flexDirection: 'column',
+        paddingTop: 0
+    },
+    gutterTop: {
+        marginTop: theme.spacing.unit
     }
 });
 
@@ -139,7 +143,7 @@ class SetupGeneral extends Component {
                                 )
                             })}
                         </RadioGroup>
-                        <FormLabel component="legend">Apply filter to image</FormLabel>
+                        <FormLabel component="legend" className={classes.gutterTop}>Apply filter to image</FormLabel>
                         <RadioGroup
                             aria-label="Image filter"
                             name="imgFilter"
